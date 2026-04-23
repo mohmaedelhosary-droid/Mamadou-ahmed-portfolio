@@ -6,20 +6,44 @@
   color-scheme: dark;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  @apply bg-ink text-slate-100 antialiased;
-  background-image: radial-gradient(circle at 20% 10%, rgba(58, 99, 158, 0.16), transparent 35%),
-    radial-gradient(circle at 80% 20%, rgba(25, 150, 173, 0.12), transparent 30%);
+  @apply bg-[#05070d] text-slate-100 antialiased;
+  background-image: radial-gradient(circle at 20% 10%, rgba(82, 124, 190, 0.2), transparent 34%),
+    radial-gradient(circle at 78% 16%, rgba(53, 102, 188, 0.14), transparent 26%);
 }
 
 .section-shell {
-  @apply relative mx-auto max-w-6xl px-6 py-20 md:px-10 md:py-28;
+  @apply relative mx-auto max-w-6xl px-6 md:px-10;
 }
 
-.glass-panel {
-  @apply rounded-3xl border border-cyan-200/15 bg-white/[0.03] backdrop-blur-xl;
+.section-spacing {
+  @apply py-24 md:py-36;
 }
 
 .kicker {
-  @apply text-xs uppercase tracking-[0.28em] text-haze/70;
+  @apply text-xs uppercase tracking-[0.32em] text-haze/70;
+}
+
+.reveal-line {
+  @apply relative inline-block;
+}
+
+.ghost-text {
+  @apply text-white/20;
+}
+
+.about-scan {
+  @apply absolute inset-y-0 left-0 w-0 overflow-hidden whitespace-nowrap text-white;
+}
+
+.scan-text {
+  @apply inline-block;
+}
+
+.scan-head {
+  @apply pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-r from-transparent via-white/90 to-transparent blur-md;
 }

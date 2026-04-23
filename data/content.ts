@@ -1,39 +1,49 @@
 export const profile = {
   name: 'Mohamed Ahmed',
   role: 'Video Editor & Color Grading Artist',
-  tagline: 'Cinematic storyteller focused on emotional visual narratives',
+  tagline:
+    'A long-form scroll journey through visual transformation, mood, and precision post-production craft.',
   about:
-    'Mohamed is a freelance beginner video editor passionate about cinematic storytelling. He focuses on color grading, sound design, transitions, and visual mood to transform raw footage into emotionally engaging edits.'
+    'I shape footage into emotional narratives through rhythm, grading, sound texture, and cinematic transition design. Every section is directed to feel immersive, intentional, and story-first.'
 };
 
-export const services = [
-  'Video Editing',
-  'Color Grading',
-  'Sound Design',
-  'Creative Transitions',
-  'Visual Storytelling',
-  'Masking Techniques'
+export const revealLines = [
+  'I sculpt pace so every cut breathes with intent.',
+  'I grade color to move emotion before dialogue begins.',
+  'I design transitions that feel invisible yet unforgettable.'
 ];
 
-export const gradingLooks = [
-  { title: 'Lake Silence', mood: 'Soft cyan shadows with warm skin highlights.' },
-  { title: 'Road Pulse', mood: 'High-contrast dusk grade with filmic grain.' },
-  { title: 'City Rain', mood: 'Neon teals and muted magenta reflections.' }
-];
-
-export const techniques = [
+export const gradingPanels = [
   {
-    title: 'Mask Driven Focus',
-    text: 'Animate masks to guide audience attention with seamless focal shifts.'
+    title: 'Noir Compression',
+    description: 'Deep blacks, restrained highlights, and controlled skin tones for tense narrative sequences.'
   },
   {
-    title: 'Rhythmic Cuts',
-    text: 'Edit pacing around breath, silence, and beat accents for emotional momentum.'
+    title: 'Golden Atmosphere',
+    description: 'Soft warm roll-off with cinematic contrast for romantic and memory-driven scenes.'
   },
   {
-    title: 'Sound Layer Sculpting',
-    text: 'Blend room tone, texture and impact hits for immersive cinematic depth.'
+    title: 'Neon Drift',
+    description: 'Cool shadows and electric accents crafted for high-energy urban storytelling.'
   }
 ];
 
-export const highlights = ['Bike Sequence', 'Monochrome Bedroom', 'Night Road', 'Golden Lake'];
+export const maskingPanels = [
+  {
+    kicker: 'Precision',
+    title: 'Tracked Mask Choreography',
+    text: 'Mask systems are timed to camera movement so attention shifts feel guided, not forced.'
+  },
+  {
+    kicker: 'Narrative',
+    title: 'Rhythm-Driven Transition Layers',
+    text: 'Multiple blend layers and sound-led cuts create transitions that connect scenes with flow.'
+  }
+];
+
+export const workMoments = [
+  { kicker: 'Film Sequence', title: 'Midnight Street Transformation' },
+  { kicker: 'Brand Story', title: 'Portrait-To-Product Motion Arc' },
+  { kicker: 'Music Visual', title: 'Pulse Edit With Tonal Shift' },
+  { kicker: 'Social Trailer', title: 'Fast Narrative Cutdown' }
+];

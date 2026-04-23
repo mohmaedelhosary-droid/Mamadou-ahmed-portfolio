@@ -4,226 +4,273 @@ import Image from 'next/image';
 import { Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { gradingLooks, highlights, profile, services, techniques } from '@/data/content';
+import { profile, revealLines, gradingPanels, maskingPanels, workMoments } from '@/data/content';
 import { useGsap } from '@/hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function SectionTitle({ kicker, title, text }: { kicker: string; title: string; text?: string }) {
-  return (
-    <header className="mb-10">
-      <p className="kicker">{kicker}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-mist md:text-5xl">{title}</h2>
-      {text && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300 md:text-base">{text}</p>}
-    </header>
-  );
-}
+const navItems = [
+  { label: 'Intro', href: '#hero' },
+  { label: 'About', href: '#about' },
+  { label: 'Identity', href: '#identity' },
+  { label: 'Craft', href: '#image-transform' },
+  { label: 'Work', href: '#selected-work' },
+  { label: 'Contact', href: '#contact' }
+];
 
 export default function HomePage() {
   useGsap(() => {
-    const aboutHeading = document.querySelector('#about-heading');
-    const aboutBody = document.querySelector('#about-copy');
-
-    if (aboutHeading && aboutBody) {
+    const ctx = gsap.context(() => {
       gsap.fromTo(
-        [aboutHeading, aboutBody],
-        { filter: 'blur(10px)', opacity: 0.3, y: 40 },
+        '.hero-content',
+        { y: 70, opacity: 0 },
         {
-          filter: 'blur(0px)',
-          opacity: 1,
           y: 0,
-          ease: 'power2.out',
-          stagger: 0.18,
-          scrollTrigger: {
-            trigger: '#about',
-            start: 'top 72%',
-            end: 'top 30%',
-            scrub: 0.8
-          }
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out'
         }
       );
-    }
 
-    gsap.to('#image-after', {
-      clipPath: 'inset(0 0 0 0)',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#image-compare',
-        start: 'top 75%',
-        end: 'bottom 40%',
-        scrub: 1.1
-      }
+      gsap.to('.hero-media', {
+        yPercent: 14,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      gsap.to('.about-scan', {
+        width: '100%',
+        stagger: 0.23,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top 72%',
+          end: 'bottom 48%',
+          scrub: 1
+        }
+      });
+
+      gsap.to('#identity', {
+        backgroundColor: '#130d24',
+        scrollTrigger: {
+          trigger: '#identity',
+          start: 'top 75%',
+          end: 'bottom 45%',
+          scrub: true
+        }
+      });
+
+      const imageTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#image-transform',
+          start: 'top top',
+          end: '+=150%',
+          scrub: true,
+          pin: true
+        }
+      });
+
+      imageTimeline
+        .to('#image-after', { clipPath: 'inset(0 0% 0 0)', ease: 'none' }, 0)
+        .to('#image-accent', { opacity: 0.9, scale: 1, ease: 'none' }, 0)
+        .to('body', { backgroundColor: '#0f172f', ease: 'none' }, 0);
+
+      const videoTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#video-transform',
+          start: 'top top',
+          end: '+=150%',
+          scrub: true,
+          pin: true
+        }
+      });
+
+      videoTimeline
+        .to('#video-after', { clipPath: 'inset(0 0% 0 0)', ease: 'none' }, 0)
+        .to('#video-panel', { borderColor: 'rgba(202, 233, 255, 0.45)', ease: 'none' }, 0)
+        .to('body', { backgroundColor: '#050913', ease: 'none' }, 0);
+
+      gsap.from('.story-panel', {
+        y: 60,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#grading',
+          start: 'top 70%'
+        }
+      });
     });
 
-    gsap.to('body', {
-      backgroundColor: '#071327',
-      scrollTrigger: {
-        trigger: '#image-compare',
-        start: 'top 55%',
-        end: 'bottom 35%',
-        scrub: 1
-      }
-    });
-
-    gsap.to('#video-after', {
-      clipPath: 'inset(0 0 0 0)',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#video-compare',
-        start: 'top 75%',
-        end: 'bottom 38%',
-        scrub: 1.2
-      }
-    });
+    return () => ctx.revert();
   }, []);
 
   return (
-    <main className="overflow-x-hidden">
-      <section className="relative min-h-screen">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-          src="/assets/videos/hero-city.mp4"
+    <main className="relative overflow-x-hidden pb-14">
+      <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
+        <nav className="pointer-events-auto flex w-full max-w-5xl items-center justify-between rounded-full border border-white/15 bg-black/40 px-5 py-3 shadow-2xl backdrop-blur-xl md:px-7">
+          <p className="text-xs font-medium uppercase tracking-[0.34em] text-slate-200">MA Studio</p>
+          <ul className="hidden items-center gap-5 md:flex">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="text-xs uppercase tracking-[0.2em] text-slate-300 transition hover:text-white">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+
+      <section id="hero" className="relative min-h-[115vh] overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=2200&q=80"
+          alt="cinematic intro"
+          fill
+          priority
+          className="hero-media object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-night/80 to-ink" />
-        <div className="section-shell relative flex min-h-screen flex-col justify-end pb-24">
-          <p className="kicker">Cinematic Portfolio</p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-white md:text-7xl">{profile.name}</h1>
-          <p className="mt-3 text-lg text-haze md:text-2xl">{profile.role}</p>
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-slate-200 md:text-lg">{profile.tagline}</p>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_25%,rgba(157,195,255,0.2),transparent_42%),linear-gradient(180deg,rgba(2,4,11,0.5),#020205_88%)]" />
+        <div className="hero-content relative mx-auto flex min-h-[115vh] max-w-6xl flex-col items-center justify-center px-6 text-center md:px-10">
+          <p className="kicker">Cinematic Portfolio Experience</p>
+          <h1 className="mt-7 max-w-5xl text-5xl font-semibold leading-[0.95] text-white md:text-8xl">Editing emotion, frame by frame.</h1>
+          <p className="mt-8 max-w-3xl text-balance text-base leading-relaxed text-slate-200 md:text-xl">{profile.tagline}</p>
         </div>
       </section>
 
-      <section id="about" className="section-shell">
-        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
-          <div>
-            <p className="kicker">About Me</p>
-            <h2 id="about-heading" className="mt-3 text-3xl font-semibold text-mist md:text-5xl">
-              I craft emotion through pacing, color and sound.
-            </h2>
-            <p id="about-copy" className="mt-5 text-sm leading-relaxed text-slate-300 md:text-base">
-              {profile.about}
+      <section id="about" className="section-shell section-spacing">
+        <p className="kicker">About</p>
+        <h2 className="mt-6 max-w-4xl text-4xl font-semibold leading-[1.05] text-white md:text-7xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
+        <div className="mt-10 space-y-4 text-2xl font-medium leading-[1.3] md:text-4xl">
+          {revealLines.map((line) => (
+            <p key={line} className="reveal-line">
+              <span className="ghost-text">{line}</span>
+              <span className="about-scan">
+                <span className="scan-text">{line}</span>
+                <span className="scan-head" />
+              </span>
             </p>
-          </div>
-          <div className="glass-panel relative overflow-hidden p-2">
-            <Image
-              src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1200&q=80"
-              alt="Mohamed Ahmed at work"
-              width={1200}
-              height={1200}
-              className="h-[420px] w-full rounded-2xl object-cover"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="section-shell">
-        <SectionTitle kicker="Services" title="Post-production built for narrative impact" />
-        <div className="grid gap-4 md:grid-cols-3">
-          {services.map((service) => (
-            <article key={service} className="glass-panel p-6 text-lg text-slate-100">
-              {service}
-            </article>
           ))}
         </div>
       </section>
 
-      <section className="section-shell">
-        <SectionTitle
-          kicker="Featured Project"
-          title="An emotional short film transformation"
-          text="Pre-shot footage was reshaped into a strong emotional arc through intentional grading, layered sound design, and precision-driven edit rhythm."
-        />
-        <div className="glass-panel overflow-hidden">
-          <video className="h-[460px] w-full object-cover" autoPlay muted loop playsInline src="/assets/videos/featured-bedroom.mp4" />
+      <section id="identity" className="section-shell section-spacing transition-colors duration-700">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <p className="kicker">Identity</p>
+            <h3 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">{profile.name}</h3>
+            <p className="mt-3 text-lg text-slate-300 md:text-2xl">{profile.role}</p>
+            <p className="mt-10 max-w-2xl text-base leading-relaxed text-slate-300 md:text-xl">{profile.about}</p>
+          </div>
+          <div className="relative">
+            <div className="absolute -right-8 -top-8 h-[70%] w-[70%] rounded-[4rem] bg-indigo-500/30 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[2.5rem] border border-white/15">
+              <Image
+                src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1300&q=80"
+                alt="portrait"
+                width={1100}
+                height={1400}
+                className="h-[640px] w-full object-cover"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="image-compare" className="section-shell">
-        <SectionTitle
-          kicker="Before / After Image"
-          title="Scroll through the color grading shift"
-          text="As you scroll, the raw still transforms into the graded cinematic frame while the environment tone deepens."
-        />
-        <div className="glass-panel relative h-[60vh] overflow-hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1800&q=80"
-            alt="Before color grading"
-            fill
-            className="object-cover"
-          />
+      <section id="image-transform" className="section-shell section-spacing">
+        <div className="mb-8 max-w-3xl">
+          <p className="kicker">Before / After Image</p>
+          <h3 className="mt-5 text-4xl font-semibold text-white md:text-6xl">Scroll to watch the scene evolve from raw to cinematic.</h3>
+        </div>
+        <div className="relative h-[68vh] overflow-hidden rounded-[2.7rem] border border-white/15">
+          <Image src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=2200&q=80" alt="before still" fill className="object-cover" />
           <div id="image-after" className="absolute inset-0" style={{ clipPath: 'inset(0 100% 0 0)' }}>
             <Image
-              src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1800&q=80"
-              alt="After color grading"
+              src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2200&q=80"
+              alt="after still"
               fill
               className="object-cover saturate-125"
             />
           </div>
+          <div id="image-accent" className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(109,40,217,0.35),transparent_45%)] opacity-0" />
         </div>
       </section>
 
-      <section id="video-compare" className="section-shell">
-        <SectionTitle
-          kicker="Before / After Video"
-          title="Raw footage evolves into a cinematic scene"
-          text="A synchronized scroll reveal compares untreated footage and final graded output, showcasing tonal separation and mood." 
-        />
-        <div className="glass-panel relative h-[65vh] overflow-hidden">
-          <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline src="/assets/videos/gas-before.mp4" />
+      <section id="video-transform" className="section-shell section-spacing">
+        <div className="mb-8 max-w-3xl">
+          <p className="kicker">Before / After Video</p>
+          <h3 className="mt-5 text-4xl font-semibold text-white md:text-6xl">Raw motion transforms into polished cinematic output while you scroll.</h3>
+        </div>
+        <div id="video-panel" className="relative h-[70vh] overflow-hidden rounded-[2.7rem] border border-white/20 bg-black">
+          <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline src="https://cdn.coverr.co/videos/coverr-driving-through-mountains-at-sunset-1579/1080p.mp4" />
           <div id="video-after" className="absolute inset-0" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-            <video className="h-full w-full object-cover" autoPlay muted loop playsInline src="/assets/videos/gas-after.mp4" />
+            <video className="h-full w-full object-cover" autoPlay muted loop playsInline src="https://cdn.coverr.co/videos/coverr-timelapse-of-a-city-street-at-night-1574/1080p.mp4" />
           </div>
         </div>
       </section>
 
-      <section className="section-shell">
-        <SectionTitle kicker="Color Grading Showcase" title="Designed looks for varied visual moods" />
-        <div className="grid gap-4 md:grid-cols-3">
-          {gradingLooks.map((look) => (
-            <article key={look.title} className="glass-panel p-6">
-              <h3 className="text-xl text-mist">{look.title}</h3>
-              <p className="mt-3 text-sm text-slate-300">{look.mood}</p>
+      <section id="grading" className="section-shell section-spacing">
+        <p className="kicker">Color Grading Showcase</p>
+        <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Large narrative panels to present distinct visual worlds.</h3>
+        <div className="mt-14 space-y-8">
+          {gradingPanels.map((panel) => (
+            <article key={panel.title} className="story-panel group relative overflow-hidden rounded-[2.6rem] border border-white/10 p-10 md:p-14">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent" />
+              <h4 className="relative text-3xl font-semibold text-white md:text-5xl">{panel.title}</h4>
+              <p className="relative mt-4 max-w-2xl text-base text-slate-300 md:text-xl">{panel.description}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="section-shell">
-        <SectionTitle kicker="Editing Techniques" title="Technical precision behind each story beat" />
-        <div className="space-y-4">
-          {techniques.map((item) => (
-            <article key={item.title} className="glass-panel p-6">
-              <h3 className="text-xl text-mist">{item.title}</h3>
-              <p className="mt-2 text-sm text-slate-300">{item.text}</p>
+      <section className="section-shell section-spacing">
+        <p className="kicker">Editing / Masking</p>
+        <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Precision layers and masked transitions built as one cinematic narrative.</h3>
+        <div className="mt-14 grid gap-6 lg:grid-cols-2">
+          {maskingPanels.map((panel) => (
+            <article key={panel.title} className="story-panel rounded-[2rem] border border-white/10 bg-white/[0.02] p-8 md:p-10">
+              <p className="text-xs uppercase tracking-[0.26em] text-slate-400">{panel.kicker}</p>
+              <h4 className="mt-5 text-2xl font-semibold text-white md:text-4xl">{panel.title}</h4>
+              <p className="mt-4 text-sm leading-relaxed text-slate-300 md:text-lg">{panel.text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="section-shell">
-        <SectionTitle kicker="Selected Work" title="Motion highlights and scene fragments" />
-        <div className="grid gap-4 md:grid-cols-4">
-          {highlights.map((title) => (
-            <div key={title} className="glass-panel p-6 text-center text-slate-200">
-              {title}
-            </div>
+      <section id="selected-work" className="section-shell section-spacing">
+        <p className="kicker">Selected Work</p>
+        <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Motion highlights arranged as editorial moments, not a standard grid.</h3>
+        <div className="mt-12 space-y-6">
+          {workMoments.map((item, index) => (
+            <article
+              key={item.title}
+              className={`story-panel rounded-[2rem] border border-white/10 p-8 md:p-10 ${index % 2 === 0 ? 'ml-auto max-w-4xl' : 'mr-auto max-w-3xl'}`}
+            >
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{item.kicker}</p>
+              <h4 className="mt-4 text-2xl font-semibold text-white md:text-4xl">{item.title}</h4>
+            </article>
           ))}
         </div>
       </section>
 
-      <section className="section-shell pb-32">
-        <SectionTitle kicker="Contact" title="Open for freelance projects" text="Let’s build emotional visuals with cinematic depth." />
-        <div className="glass-panel max-w-xl space-y-4 p-8">
-          <p className="flex items-center gap-3 text-slate-200">
-            <Mail className="h-4 w-4 text-haze" /> mohmaedelhosary@gmail.com
-          </p>
-          <p className="flex items-center gap-3 text-slate-200">
-            <Phone className="h-4 w-4 text-haze" /> +9010987922
-          </p>
+      <section id="contact" className="section-shell section-spacing pb-32">
+        <div className="rounded-[2.8rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-16">
+          <p className="kicker">Contact</p>
+          <h3 className="mt-5 text-4xl font-semibold text-white md:text-6xl">Let&apos;s build your next cinematic story.</h3>
+          <div className="mt-10 space-y-4 text-lg text-slate-200">
+            <p className="flex items-center gap-3">
+              <Mail className="h-5 w-5 text-haze" /> mohmaedelhosary@gmail.com
+            </p>
+            <p className="flex items-center gap-3">
+              <Phone className="h-5 w-5 text-haze" /> +9010987922
+            </p>
+          </div>
         </div>
       </section>
     </main>
