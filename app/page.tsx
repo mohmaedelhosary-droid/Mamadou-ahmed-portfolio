@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { profile, revealLines, gradingPanels, maskingPanels, workMoments } from '@/data/content';
+import { profile, revealLines, gradingPanels, maskingPanels, workMoments, videoSources } from '@/data/content';
 import { useGsap } from '@/hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,6 +19,9 @@ const navItems = [
 ];
 
 export default function HomePage() {
+  const gradingVideos = [videoSources.featuredVideo, videoSources.motionVideo1, videoSources.motionVideo2];
+  const workShowcaseVideos = [videoSources.showcaseVideo, videoSources.bwVideo, videoSources.extraShowcaseVideo, videoSources.featuredVideo];
+
   useGsap(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.hero-content', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out' });
@@ -152,12 +155,14 @@ export default function HomePage() {
       </header>
 
       <section id="hero" className="relative min-h-screen overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=2200&q=80"
-          alt="cinematic intro"
-          fill
-          priority
-          className="hero-media object-cover"
+        <video
+          className="hero-media absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          src={videoSources.heroVideo}
         />
         <div className="hero-vignette absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(157,195,255,0.24),transparent_38%),linear-gradient(180deg,rgba(2,4,11,0.5),#020205_88%)]" />
         <div className="hero-content relative mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 text-center md:px-10">
@@ -234,9 +239,9 @@ export default function HomePage() {
           <h3 className="mt-5 text-4xl font-semibold text-white md:text-6xl">Raw motion transforms into polished cinematic output while you scroll.</h3>
         </div>
         <div id="video-panel" className="relative h-[70vh] overflow-hidden rounded-[2.7rem] border border-white/20 bg-black">
-          <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline src="https://cdn.coverr.co/videos/coverr-driving-through-mountains-at-sunset-1579/1080p.mp4" />
+          <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline src={videoSources.beforeVideo} />
           <div id="video-after" className="absolute inset-0" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-            <video className="h-full w-full object-cover" autoPlay muted loop playsInline src="https://cdn.coverr.co/videos/coverr-timelapse-of-a-city-street-at-night-1574/1080p.mp4" />
+            <video className="h-full w-full object-cover" autoPlay muted loop playsInline src={videoSources.afterVideo} />
           </div>
           <p id="video-caption-before" className="absolute bottom-6 left-6 text-xs uppercase tracking-[0.26em] text-white/90">Raw</p>
           <p id="video-caption-after" className="absolute bottom-6 right-6 text-xs uppercase tracking-[0.26em] text-white/35">Final</p>
@@ -247,9 +252,18 @@ export default function HomePage() {
         <p className="kicker">Color Grading Showcase</p>
         <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Large narrative panels to present distinct visual worlds.</h3>
         <div className="mt-14 space-y-8">
-          {gradingPanels.map((panel) => (
+          {gradingPanels.map((panel, index) => (
             <article key={panel.title} className="story-panel group relative overflow-hidden rounded-[2.6rem] border border-white/10 p-10 md:p-14">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent" />
+              <video
+                className="absolute inset-0 h-full w-full object-cover opacity-45"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                src={gradingVideos[index] ?? videoSources.motionVideo1}
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent" />
               <h4 className="relative text-3xl font-semibold text-white md:text-5xl">{panel.title}</h4>
               <p className="relative mt-4 max-w-2xl text-base text-slate-300 md:text-xl">{panel.description}</p>
             </article>
@@ -260,6 +274,9 @@ export default function HomePage() {
       <section className="section-shell section-spacing">
         <p className="kicker">Editing / Masking</p>
         <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Precision layers and masked transitions built as one cinematic narrative.</h3>
+        <div className="mt-10 overflow-hidden rounded-[2rem] border border-white/10">
+          <video className="h-[40vh] w-full object-cover" autoPlay muted loop playsInline preload="metadata" src={videoSources.maskingVideo} />
+        </div>
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           {maskingPanels.map((panel) => (
             <article key={panel.title} className="story-panel rounded-[2rem] border border-white/10 bg-white/[0.02] p-8 md:p-10">
@@ -275,10 +292,20 @@ export default function HomePage() {
         <p className="kicker">Selected Work</p>
         <h3 className="mt-5 max-w-4xl text-4xl font-semibold text-white md:text-6xl">Motion highlights arranged as editorial moments, not a standard grid.</h3>
         <div className="work-track mt-12 flex gap-6 pr-10">
-          {workMoments.map((item) => (
-            <article key={item.title} className="story-panel min-h-[280px] min-w-[70vw] rounded-[2rem] border border-white/10 p-8 md:min-w-[48vw] md:p-10">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{item.kicker}</p>
-              <h4 className="mt-4 text-2xl font-semibold text-white md:text-4xl">{item.title}</h4>
+          {workMoments.map((item, index) => (
+            <article key={item.title} className="story-panel relative min-h-[280px] min-w-[70vw] overflow-hidden rounded-[2rem] border border-white/10 p-8 md:min-w-[48vw] md:p-10">
+              <video
+                className="absolute inset-0 h-full w-full rounded-[2rem] object-cover opacity-35"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                src={workShowcaseVideos[index] ?? videoSources.showcaseVideo}
+              />
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-black/30 via-black/40 to-black/60" />
+              <p className="relative text-xs uppercase tracking-[0.25em] text-slate-300">{item.kicker}</p>
+              <h4 className="relative mt-4 text-2xl font-semibold text-white md:text-4xl">{item.title}</h4>
             </article>
           ))}
         </div>
