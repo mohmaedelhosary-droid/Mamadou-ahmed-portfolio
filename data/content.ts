@@ -7,6 +7,72 @@ export const profile = {
     'I shape footage into emotional narratives through rhythm, grading, sound texture, and cinematic transition design. Every section is directed to feel immersive, intentional, and story-first.'
 };
 
+export const videoSources = {
+  heroVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111663/Lake_xprehu.mp4',
+  featuredVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111566/Bedroom_zkqrxl.mp4',
+  beforeVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111459/gas1_video-converter.com_g7trmg.mp4',
+  afterVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111469/gas2_video-converter.com_suw8q3.mp4',
+  maskingVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111644/Masking_o5hhml.mp4',
+  motionVideo1: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111526/Road_jlqekt.mp4',
+  motionVideo2: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111534/city_video-converter.com_vkch2x.mp4',
+  showcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777111502/bike-black_video-converter.com_arqtu1.mp4',
+  bwVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777056389/bw_kpmapt.mp4',
+  extraShowcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777113944/Mountain_zxmajh.mp4'
+};
+
+export const videoShowcase = [
+  {
+    title: 'Lake',
+    description: 'A cinematic landscape shot focused on calm motion, natural light, and color mood.',
+    src: videoSources.heroVideo
+  },
+  {
+    title: 'Bedroom',
+    description: 'An intimate mood-driven scene built around emotion, atmosphere, and cinematic pacing.',
+    src: videoSources.featuredVideo
+  },
+  {
+    title: 'Gas Station — Before',
+    description: 'Raw visual state used to show the original look before the final grading and polish.',
+    src: videoSources.beforeVideo
+  },
+  {
+    title: 'Gas Station — After',
+    description: 'Final graded version with stronger mood, contrast, and cinematic tone.',
+    src: videoSources.afterVideo
+  },
+  {
+    title: 'Masking',
+    description: 'A visual editing example showing masking work and compositing technique.',
+    src: videoSources.maskingVideo
+  },
+  {
+    title: 'Road',
+    description: 'A movement-focused sequence highlighting framing, rhythm, and grading in open space.',
+    src: videoSources.motionVideo1
+  },
+  {
+    title: 'City',
+    description: 'A cinematic city shot showcasing atmosphere, scale, and clean visual tone.',
+    src: videoSources.motionVideo2
+  },
+  {
+    title: 'Bike Black',
+    description: 'A monochrome visual piece focused on contrast, texture, and graphic mood.',
+    src: videoSources.showcaseVideo
+  },
+  {
+    title: 'Black & White',
+    description: 'A black-and-white cinematic study emphasizing mood, contrast, and emotion.',
+    src: videoSources.bwVideo
+  },
+  {
+    title: 'Mountain',
+    description: 'A scenic visual piece built around scale, natural depth, and immersive grading.',
+    src: videoSources.extraShowcaseVideo
+  }
+];
+
 export const revealLines = [
   'I sculpt pace so every cut breathes with intent.',
   'I grade color to move emotion before dialogue begins.',
