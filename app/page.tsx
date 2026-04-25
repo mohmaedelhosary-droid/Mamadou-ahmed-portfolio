@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { imageComparison, profile, revealLines, videoShowcase } from '@/data/content';
+import { heroShowcase, imageComparison, profile, revealLines, videoShowcase } from '@/data/content';
 import { useGsap } from '@/hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,7 +18,7 @@ const navItems = [
   { label: 'Contact', href: '#contact' }
 ];
 
-const sectionThemes = ['#070b14', '#0b1320', '#101329', '#0e1b2b', '#101527', '#0e1523'];
+const sectionThemes = ['#060910', '#0a1120', '#11182b', '#1a1325', '#101f2a', '#201116', '#121620', '#0b1b23'];
 
 export default function HomePage() {
   const [comparisonValue, setComparisonValue] = useState(50);
@@ -49,6 +49,25 @@ export default function HomePage() {
           trigger: '#video-showcase',
           start: 'top 78%'
         }
+      });
+
+      gsap.utils.toArray<HTMLElement>('.showcase-stage').forEach((stage) => {
+        gsap.fromTo(
+          stage,
+          { y: 36, scale: 0.985, opacity: 0.85 },
+          {
+            y: -10,
+            scale: 1,
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: stage,
+              start: 'top 85%',
+              end: 'bottom 20%',
+              scrub: true
+            }
+          }
+        );
       });
 
       gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section) => {
@@ -86,10 +105,16 @@ export default function HomePage() {
       <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
           <p className="kicker">Cinematic Portfolio</p>
-          <h1 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">Real work. Clear playback. Premium presentation.</h1>
+          <h1 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">Real work. Clear playback. Cinematic progression.</h1>
           <p className="mx-auto mt-4 max-w-3xl text-sm text-slate-300 md:text-base">
-            Every piece below is presented as a full showcase with clean controls, light text, and video-first visibility.
+            Each section introduces a distinct visual world with smooth mood transitions while keeping media large and watchable.
           </p>
+        </div>
+        <div className="showcase-stage mt-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7">
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Opening Visual</p>
+          <h2 className="mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{heroShowcase.title}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">{heroShowcase.description}</p>
+          <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={heroShowcase.src} />
         </div>
       </section>
 
@@ -166,10 +191,15 @@ export default function HomePage() {
 
       <section id="video-showcase" className="section-shell section-spacing">
         {videoShowcase.map((item, index) => (
-          <div key={item.title} className="theme-section showcase-card mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7" data-bg={sectionThemes[index % sectionThemes.length]}>
+          <div
+            key={item.title}
+            className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
+            data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
+          >
             <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Showcase {index + 1}</p>
             <h4 className="mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">{item.description}</p>
+            {'credit' in item && item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
             <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={item.src} />
           </div>
         ))}

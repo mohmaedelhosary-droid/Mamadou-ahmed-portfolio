@@ -23,31 +23,6 @@ export const videoSources = {
 
 export const videoShowcase = [
   {
-    title: 'Lake',
-    description: 'A cinematic landscape shot focused on calm motion, natural light, and color mood.',
-    src: videoSources.heroVideo
-  },
-  {
-    title: 'Bedroom',
-    description: 'An intimate mood-driven scene built around emotion, atmosphere, and cinematic pacing.',
-    src: videoSources.featuredVideo
-  },
-  {
-    title: 'Gas Station — Before',
-    description: 'Raw visual state used to show the original look before the final grading and polish.',
-    src: videoSources.beforeVideo
-  },
-  {
-    title: 'Gas Station — After',
-    description: 'Final graded version with stronger mood, contrast, and cinematic tone.',
-    src: videoSources.afterVideo
-  },
-  {
-    title: 'Masking',
-    description: 'A visual editing example showing masking work and compositing technique.',
-    src: videoSources.maskingVideo
-  },
-  {
     title: 'Road',
     description: 'A movement-focused sequence highlighting framing, rhythm, and grading in open space.',
     src: videoSources.motionVideo1
@@ -58,26 +33,53 @@ export const videoShowcase = [
     src: videoSources.motionVideo2
   },
   {
-    title: 'Bike Black',
-    description: 'A monochrome visual piece focused on contrast, texture, and graphic mood.',
-    src: videoSources.showcaseVideo
+    title: 'Bedroom — Featured Short Film',
+    description: 'A narrative short-film project where I handled editing, color grading, and sound design.',
+    credit: 'Credit: Editing, Color Grading, and Sound Design by Mohamed Ahmed (Cinematography by another creator).',
+    src: videoSources.featuredVideo
   },
   {
-    title: 'Black & White',
-    description: 'A black-and-white cinematic study emphasizing mood, contrast, and emotion.',
+    title: 'Gas Station — Green Mood',
+    description: 'A standalone graded mood version of the same scene, built around a green tonal world.',
+    src: videoSources.beforeVideo
+  },
+  {
+    title: 'Gas Station — Red Mood',
+    description: 'A separate standalone graded mood of the same scene, built around red tonal energy.',
+    src: videoSources.afterVideo
+  },
+  {
+    title: 'BW — Motion & Editing Reel',
+    description: 'A reel-style piece featuring transitions, movement, and on-screen text flow.',
     src: videoSources.bwVideo
   },
   {
-    title: 'Mountain',
-    description: 'A scenic visual piece built around scale, natural depth, and immersive grading.',
-    src: videoSources.extraShowcaseVideo
+    title: 'Bike Black',
+    description: 'A separate black-and-white cinematic piece focused on contrast, texture, and atmosphere.',
+    src: videoSources.showcaseVideo
+  },
+  {
+    title: 'Masking',
+    description: 'A technical editing showcase focused on masking and compositing precision.',
+    src: videoSources.maskingVideo
+  },
+  {
+    title: 'Lake',
+    description: 'A calm cinematic landscape sequence used as a supporting atmospheric world.',
+    src: videoSources.heroVideo
   },
   {
     title: 'Document',
-    description: 'A cinematic visual piece presented as a standalone showcase.',
+    description: 'A supporting cinematic visual piece presented as a standalone showcase.',
     src: videoSources.documentVideo
   }
 ];
+
+export const heroShowcase = {
+  title: 'Mountain',
+  description: 'A scenic opening visual built around scale, natural depth, and immersive grading.',
+  src: videoSources.extraShowcaseVideo
+};
 
 export const imageComparison = {
   title: 'Before / After',
