@@ -13,40 +13,53 @@ gsap.registerPlugin(ScrollTrigger);
 const navItems = [
   { label: 'Intro', href: '#hero' },
   { label: 'About', href: '#about' },
-  { label: 'Identity', href: '#identity' },
-  { label: 'Videos', href: '#video-showcase' },
+  { label: 'Compare', href: '#image-transform' },
+  { label: 'Showcase', href: '#video-showcase' },
   { label: 'Contact', href: '#contact' }
 ];
+
+const sectionThemes = ['#070b14', '#0b1320', '#101329', '#0e1b2b', '#101527', '#0e1523'];
 
 export default function HomePage() {
   const [comparisonValue, setComparisonValue] = useState(50);
 
   useGsap(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.hero-content', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' });
+      gsap.fromTo('.hero-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
 
       gsap.to('.nav-shell', {
-        width: 'min(860px, 92vw)',
-        backgroundColor: 'rgba(3, 6, 12, 0.64)',
+        width: 'min(900px, 94vw)',
+        backgroundColor: 'rgba(3, 6, 12, 0.72)',
         borderColor: 'rgba(255,255,255,0.28)',
         scrollTrigger: {
           trigger: '#about',
           start: 'top 88%',
-          end: 'top 18%',
+          end: 'top 15%',
           scrub: true
         }
       });
 
-      gsap.from('.media-card', {
-        y: 40,
+      gsap.from('.showcase-card', {
+        y: 44,
         opacity: 0,
-        stagger: 0.08,
-        duration: 0.8,
+        duration: 0.95,
         ease: 'power2.out',
+        stagger: 0.12,
         scrollTrigger: {
           trigger: '#video-showcase',
-          start: 'top 75%'
+          start: 'top 78%'
         }
+      });
+
+      gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section) => {
+        const nextColor = section.dataset.bg ?? '#070b14';
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top 55%',
+          end: 'bottom 45%',
+          onEnter: () => gsap.to('body', { backgroundColor: nextColor, duration: 0.8, overwrite: 'auto' }),
+          onEnterBack: () => gsap.to('body', { backgroundColor: nextColor, duration: 0.8, overwrite: 'auto' })
+        });
       });
     });
 
@@ -56,7 +69,7 @@ export default function HomePage() {
   return (
     <main className="relative overflow-x-hidden pb-14">
       <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
-        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1060px] items-center justify-between rounded-full border border-white/15 bg-black/40 px-5 py-3 shadow-2xl backdrop-blur-xl md:px-7">
+        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-full border border-white/15 bg-black/40 px-5 py-3 shadow-2xl backdrop-blur-xl md:px-7">
           <p className="text-xs font-medium uppercase tracking-[0.34em] text-slate-200">MA Studio</p>
           <ul className="hidden items-center gap-5 md:flex">
             {navItems.map((item) => (
@@ -70,18 +83,17 @@ export default function HomePage() {
         </nav>
       </header>
 
-      <section id="hero" className="section-shell section-spacing pt-32 md:pt-36">
+      <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
-          <p className="kicker">Cinematic Showcase</p>
-          <h1 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">Featured Work: Lake</h1>
-          <p className="mx-auto mt-4 max-w-3xl text-sm text-slate-300 md:text-base">A cinematic landscape shot focused on calm motion, natural light, and color mood.</p>
+          <p className="kicker">Cinematic Portfolio</p>
+          <h1 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">Real work. Clear playback. Premium presentation.</h1>
+          <p className="mx-auto mt-4 max-w-3xl text-sm text-slate-300 md:text-base">
+            Every piece below is presented as a full showcase with clean controls, light text, and video-first visibility.
+          </p>
         </div>
-        <article className="media-card mt-10 overflow-hidden rounded-[2rem] border border-white/15 bg-[#0a0f1c] p-4 md:p-6">
-          <video className="w-full rounded-[1.3rem] object-cover" autoPlay muted loop playsInline preload="metadata" src={videoShowcase[0].src} />
-        </article>
       </section>
 
-      <section id="about" className="section-shell section-spacing relative">
+      <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[1]}>
         <p className="kicker">About</p>
         <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight text-white md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
         <div className="mt-10 space-y-3 text-lg leading-[1.35] text-slate-300 md:text-2xl">
@@ -89,10 +101,8 @@ export default function HomePage() {
             <p key={line}>{line}</p>
           ))}
         </div>
-      </section>
 
-      <section id="identity" className="section-shell section-spacing transition-colors duration-700">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="kicker">Identity</p>
             <h3 className="mt-5 text-3xl font-semibold leading-tight text-white md:text-5xl">{profile.name}</h3>
@@ -111,10 +121,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="image-transform" className="section-shell section-spacing">
+      <section id="image-transform" className="theme-section section-shell section-spacing" data-bg={sectionThemes[2]}>
         <p className="kicker">Image Comparison</p>
         <h3 className="mt-5 max-w-3xl text-3xl font-semibold text-white md:text-5xl">{imageComparison.title}</h3>
         <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">{imageComparison.description}</p>
+
         <article className="mt-10 rounded-[1.8rem] border border-white/15 bg-[#090d18] p-4 md:p-5">
           <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
             <Image
@@ -134,7 +145,7 @@ export default function HomePage() {
               />
             </div>
             <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
-              <div className="h-full w-[2px] bg-white/80" />
+              <div className="h-full w-[2px] bg-white/90" />
             </div>
           </div>
           <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
@@ -150,35 +161,21 @@ export default function HomePage() {
             aria-label="Before and after image comparison slider"
             className="mt-4 w-full accent-slate-200"
           />
-          <div className="mt-2 text-xs text-slate-400">Drag the slider to compare the original and final graded image.</div>
         </article>
       </section>
 
       <section id="video-showcase" className="section-shell section-spacing">
-        <p className="kicker">Video Showcase</p>
-        <h3 className="mt-5 max-w-4xl text-3xl font-semibold text-white md:text-5xl">Featured works with clear, watchable presentation.</h3>
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
-          {videoShowcase.map((item, index) => (
-            <article key={item.title} className="media-card rounded-[1.8rem] border border-white/15 bg-[#090d18] p-4 md:p-5">
-              <video
-                className="w-full rounded-[1.1rem] object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                src={item.src}
-              />
-              <h4 className="mt-4 text-lg font-medium text-slate-100 md:text-xl">
-                {index + 1}. {item.title}
-              </h4>
-              <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.description}</p>
-            </article>
-          ))}
-        </div>
+        {videoShowcase.map((item, index) => (
+          <div key={item.title} className="theme-section showcase-card mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7" data-bg={sectionThemes[index % sectionThemes.length]}>
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Showcase {index + 1}</p>
+            <h4 className="mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">{item.description}</p>
+            <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={item.src} />
+          </div>
+        ))}
       </section>
 
-      <section id="contact" className="section-shell section-spacing pb-32">
+      <section id="contact" className="theme-section section-shell section-spacing pb-32" data-bg={sectionThemes[5]}>
         <div className="rounded-[2.2rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-14">
           <p className="kicker">Contact</p>
           <h3 className="mt-5 text-3xl font-semibold text-white md:text-5xl">Let&apos;s build your next cinematic story.</h3>
