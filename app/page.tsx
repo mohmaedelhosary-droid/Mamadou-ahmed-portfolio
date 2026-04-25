@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { profile, revealLines, videoShowcase } from '@/data/content';
+import { imageComparison, profile, revealLines, videoShowcase } from '@/data/content';
 import { useGsap } from '@/hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +19,8 @@ const navItems = [
 ];
 
 export default function HomePage() {
+  const [comparisonValue, setComparisonValue] = useState(50);
+
   useGsap(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.hero-content', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' });
@@ -109,22 +112,46 @@ export default function HomePage() {
       </section>
 
       <section id="image-transform" className="section-shell section-spacing">
-        <p className="kicker">Image Work</p>
-        <h3 className="mt-5 max-w-3xl text-3xl font-semibold text-white md:text-5xl">Image references are kept as-is in this pass.</h3>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <div className="overflow-hidden rounded-[1.6rem] border border-white/15">
-            <Image src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=2200&q=80" alt="before still" width={1400} height={1000} className="h-full w-full object-cover" />
-          </div>
-          <div className="overflow-hidden rounded-[1.6rem] border border-white/15">
+        <p className="kicker">Image Comparison</p>
+        <h3 className="mt-5 max-w-3xl text-3xl font-semibold text-white md:text-5xl">{imageComparison.title}</h3>
+        <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">{imageComparison.description}</p>
+        <article className="mt-10 rounded-[1.8rem] border border-white/15 bg-[#090d18] p-4 md:p-5">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
             <Image
-              src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2200&q=80"
-              alt="after still"
-              width={1400}
-              height={1000}
-              className="h-full w-full object-cover"
+              src={imageComparison.afterImage}
+              alt="After graded version"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 1200px"
             />
+            <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
+              <Image
+                src={imageComparison.beforeImage}
+                alt="Before original version"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 1200px"
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
+              <div className="h-full w-[2px] bg-white/80" />
+            </div>
           </div>
-        </div>
+          <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
+            <span>Before</span>
+            <span>After</span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={comparisonValue}
+            onChange={(event) => setComparisonValue(Number(event.target.value))}
+            aria-label="Before and after image comparison slider"
+            className="mt-4 w-full accent-slate-200"
+          />
+          <div className="mt-2 text-xs text-slate-400">Drag the slider to compare the original and final graded image.</div>
+        </article>
       </section>
 
       <section id="video-showcase" className="section-shell section-spacing">
