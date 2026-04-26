@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { Mail, Phone } from 'lucide-react';
+import { Instagram, Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { heroShowcase, imageComparison, portraitImage, profile, revealLines, videoShowcase } from '@/data/content';
@@ -185,7 +185,8 @@ export default function HomePage() {
             <p className="kicker text-slate-700">Identity</p>
             <h3 className="heading-cinematic mt-5 text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">{profile.name}</h3>
             <p className="description-elegant mt-3 text-xl text-slate-700 md:text-2xl">{profile.role}</p>
-            <p className="description-elegant mt-8 max-w-2xl text-lg leading-relaxed text-slate-700 md:text-xl">{profile.about}</p>
+            <p className="description-elegant mt-7 max-w-2xl text-lg leading-relaxed text-slate-700 md:text-xl">{profile.about}</p>
+            <p className="description-elegant mt-4 text-base text-slate-600 md:text-lg">A focused editorial identity block built around clarity, tone, and cinematic presence.</p>
           </div>
           <div className="relative">
             <div className="absolute -left-6 -top-6 h-[74%] w-[72%] rounded-[2.5rem] bg-red-200/80" />
@@ -199,6 +200,7 @@ export default function HomePage() {
               className="h-[620px] w-full object-cover object-top"
             />
             </div>
+            <p className="description-elegant mt-4 text-sm text-slate-600">Portrait</p>
           </div>
         </div>
       </section>
@@ -282,7 +284,7 @@ export default function HomePage() {
       <section id="contact" className="theme-section section-shell section-spacing pb-32" data-bg={sectionThemes[5]}>
         <div className="rounded-[2.2rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-14">
           <p className="kicker text-slate-700">Contact</p>
-          <h3 className="heading-cinematic mt-5 text-3xl font-semibold text-slate-900 md:text-5xl">Let&apos;s build your next cinematic story.</h3>
+          <h3 className="heading-cinematic mt-5 text-3xl font-semibold text-slate-900 md:text-5xl">Let&apos;s create your next cinematic piece.</h3>
           <div className="mt-8 space-y-4 text-base text-slate-700 md:text-lg">
             <p className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-haze" /> mohmaedelhosary@gmail.com
@@ -290,6 +292,15 @@ export default function HomePage() {
             <p className="flex items-center gap-3">
               <Phone className="h-5 w-5 text-haze" /> +9010987922
             </p>
+            <a
+              href="https://www.instagram.com/mamdou.amadu/?hl=en"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Instagram className="h-4 w-4" />
+              @mamdou.amadu
+            </a>
           </div>
         </div>
       </section>
