@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Instagram, Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -24,6 +24,14 @@ const transitionDirections = ['ltr', 'rtl', 'btt', 'ltr', 'rtl', 'btt'];
 export default function HomePage() {
   const [comparisonValue, setComparisonValue] = useState(50);
   const [scrollRevealValue, setScrollRevealValue] = useState(0);
+  const [isStickyNav, setIsStickyNav] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setIsStickyNav(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useGsap(() => {
     const ctx = gsap.context(() => {
@@ -113,7 +121,7 @@ export default function HomePage() {
         const direction = transitionDirections[index % transitionDirections.length] as 'ltr' | 'rtl' | 'btt';
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 55%',
+          start: 'top 88%',
           end: 'bottom 45%',
           onEnter: () => setMood(nextColor, direction, index === 2),
           onEnterBack: () => setMood(nextColor, direction, index === 2)
@@ -137,7 +145,7 @@ export default function HomePage() {
       <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-[#F3F0EA]" />
       <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
 
-      <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
+      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-5' : 'absolute top-5'}`}>
         <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/82 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
           <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
           <ul className="hidden items-center gap-2 md:flex">
@@ -171,10 +179,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[0]}>
-        <p className="kicker text-slate-700">About</p>
-        <h2 className="heading-cinematic mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
-        <div className="description-elegant mt-10 space-y-3 text-2xl leading-[1.25] text-slate-700 md:text-3xl">
+      <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[2]}>
+        <p className="kicker text-slate-300">About</p>
+        <h2 className="heading-cinematic mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
+        <div className="description-elegant mt-10 space-y-3 text-2xl leading-[1.25] text-slate-300 md:text-3xl">
           {revealLines.map((line) => (
             <p key={line}>{line}</p>
           ))}
@@ -182,11 +190,11 @@ export default function HomePage() {
 
         <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="kicker text-slate-700">Identity</p>
-            <h3 className="heading-cinematic mt-5 text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">{profile.name}</h3>
-            <p className="description-elegant mt-3 text-xl text-slate-700 md:text-2xl">{profile.role}</p>
-            <p className="description-elegant mt-7 max-w-2xl text-lg leading-relaxed text-slate-700 md:text-xl">{profile.about}</p>
-            <p className="description-elegant mt-4 text-base text-slate-600 md:text-lg">A focused editorial identity block built around clarity, tone, and cinematic presence.</p>
+            <p className="kicker text-slate-300">Identity</p>
+            <h3 className="heading-cinematic mt-5 text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">{profile.name}</h3>
+            <p className="description-elegant mt-3 text-xl text-slate-300 md:text-2xl">{profile.role}</p>
+            <p className="description-elegant mt-7 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl">{profile.about}</p>
+            <p className="description-elegant mt-4 text-base text-slate-400 md:text-lg">A focused editorial identity block built around clarity, tone, and cinematic presence.</p>
           </div>
           <div className="relative">
             <div className="absolute -left-6 -top-6 h-[74%] w-[72%] rounded-[2.5rem] bg-red-200/80" />
@@ -200,7 +208,7 @@ export default function HomePage() {
               className="h-[620px] w-full object-cover object-top"
             />
             </div>
-            <p className="description-elegant mt-4 text-sm text-slate-600">Portrait</p>
+            <p className="description-elegant mt-4 text-sm text-slate-400">Portrait</p>
           </div>
         </div>
       </section>
