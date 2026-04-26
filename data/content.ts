@@ -7,6 +7,9 @@ export const profile = {
     'I shape footage into emotional narratives through rhythm, grading, sound texture, and cinematic transition design. Every section is directed to feel immersive, intentional, and story-first.'
 };
 
+export const portraitImage =
+  'https://res.cloudinary.com/dotredxrx/image/upload/q_auto/f_auto/v1777216098/my_photo00087537_t2lghn.png';
+
 export const videoSources = {
   heroVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111663/Lake_xprehu.mp4',
   featuredVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111566/Bedroom_zkqrxl.mp4',
@@ -23,48 +26,48 @@ export const videoSources = {
 export const videoShowcase = [
   {
     title: 'Road',
-    description: 'A movement-focused sequence highlighting framing, rhythm, and grading in open space.',
+    description: 'Movement, framing, and grading in open space.',
     src: videoSources.motionVideo1
   },
   {
     title: 'City',
-    description: 'A cinematic city shot showcasing atmosphere, scale, and clean visual tone.',
+    description: 'Atmosphere, scale, and a clean cinematic tone.',
     src: videoSources.motionVideo2
   },
   {
     title: 'Bedroom — Featured Short Film',
-    description: 'A narrative short-film project where I handled editing, color grading, and sound design.',
+    description: 'Featured short film project.',
     credit: 'Credit: Editing, Color Grading, and Sound Design by Mohamed Ahmed (Cinematography by another creator).',
     src: videoSources.featuredVideo
   },
   {
     title: 'Gas Station — Green Mood',
-    description: 'A standalone graded mood version of the same scene, built around a green tonal world.',
+    description: 'Standalone grade with a green tonal mood.',
     src: videoSources.beforeVideo
   },
   {
     title: 'Gas Station — Red Mood',
-    description: 'A separate standalone graded mood of the same scene, built around red tonal energy.',
+    description: 'Standalone grade with a red tonal mood.',
     src: videoSources.afterVideo
   },
   {
     title: 'BW — Motion & Editing Reel',
-    description: 'A reel-style piece featuring transitions, movement, and on-screen text flow.',
+    description: 'Reel-style editing with transitions, movement, and text.',
     src: videoSources.bwVideo
   },
   {
     title: 'Bike Black',
-    description: 'A separate black-and-white cinematic piece focused on contrast, texture, and atmosphere.',
+    description: 'Black-and-white cinematic piece with contrast and texture.',
     src: videoSources.showcaseVideo
   },
   {
     title: 'Masking',
-    description: 'A technical editing showcase focused on masking and compositing precision.',
+    description: 'Masking and compositing precision showcase.',
     src: videoSources.maskingVideo
   },
   {
     title: 'Lake',
-    description: 'A calm cinematic landscape sequence used as a supporting atmospheric world.',
+    description: 'Calm landscape sequence with cinematic mood.',
     src: videoSources.heroVideo
   }
 ];

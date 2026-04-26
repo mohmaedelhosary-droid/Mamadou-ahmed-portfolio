@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { heroShowcase, imageComparison, profile, revealLines, videoShowcase } from '@/data/content';
+import { heroShowcase, imageComparison, portraitImage, profile, revealLines, videoShowcase } from '@/data/content';
 import { useGsap } from '@/hooks/useGsap';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,9 +30,9 @@ export default function HomePage() {
       gsap.fromTo('.hero-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
 
       gsap.to('.nav-shell', {
-        width: 'min(900px, 94vw)',
-        backgroundColor: 'rgba(3, 6, 12, 0.72)',
-        borderColor: 'rgba(255,255,255,0.28)',
+        width: 'min(980px, 94vw)',
+        backgroundColor: 'rgba(8, 12, 22, 0.82)',
+        borderColor: 'rgba(255,255,255,0.4)',
         scrollTrigger: {
           trigger: '#about',
           start: 'top 88%',
@@ -73,21 +73,22 @@ export default function HomePage() {
       });
 
       const setMood = (nextColor: string, direction: 'ltr' | 'rtl' | 'btt', sharp = false) => {
-        const fromClip =
+        const axis =
           direction === 'rtl'
-            ? 'inset(0 0 0 100%)'
+            ? { xPercent: 100, yPercent: 0 }
             : direction === 'btt'
-              ? 'inset(100% 0 0 0)'
-              : 'inset(0 100% 0 0)';
-        gsap.set('#mood-wipe', { backgroundColor: nextColor, clipPath: fromClip });
+              ? { xPercent: 0, yPercent: 100 }
+              : { xPercent: -100, yPercent: 0 };
+        gsap.set('#mood-wipe', { backgroundColor: nextColor, opacity: 1, ...axis });
         gsap.to('#mood-wipe', {
-          clipPath: 'inset(0 0 0 0)',
-          duration: sharp ? 0.18 : 0.72,
-          ease: sharp ? 'power1.inOut' : 'power2.inOut',
+          xPercent: 0,
+          yPercent: 0,
+          duration: sharp ? 0.26 : 0.62,
+          ease: sharp ? 'power2.out' : 'power3.out',
           overwrite: true,
           onComplete: () => {
             gsap.set('#mood-base', { backgroundColor: nextColor });
-            gsap.set('#mood-wipe', { clipPath: 'inset(0 100% 0 0)' });
+            gsap.to('#mood-wipe', { opacity: 0, duration: 0.28, ease: 'power1.out' });
           }
         });
       };
@@ -119,15 +120,18 @@ export default function HomePage() {
   return (
     <main className="relative overflow-x-hidden pb-14">
       <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-[#F3F0EA]" />
-      <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 [clip-path:inset(0_100%_0_0)]" />
+      <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
 
       <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
-        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-full border border-white/15 bg-black/40 px-5 py-3 shadow-2xl backdrop-blur-xl md:px-7">
-          <p className="text-xs font-medium uppercase tracking-[0.34em] text-slate-200">MA Studio</p>
-          <ul className="hidden items-center gap-5 md:flex">
+        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/85 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
+          <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
+          <ul className="hidden items-center gap-2 md:flex">
             {navItems.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className="text-xs uppercase tracking-[0.2em] text-slate-300 transition hover:text-white">
+                <a
+                  href={item.href}
+                  className="rounded-full border border-transparent px-3 py-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-200 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+                >
                   {item.label}
                 </a>
               </li>
@@ -173,7 +177,7 @@ export default function HomePage() {
             <div className="absolute -bottom-6 right-0 h-[48%] w-[45%] rounded-[2rem] bg-yellow-100/70" />
             <div className="relative overflow-hidden rounded-[2.2rem] border border-white/25 shadow-[0_26px_90px_rgba(13,18,34,0.25)]">
             <Image
-              src="https://res.cloudinary.com/dotredxrx/image/upload/q_auto/f_auto/v1777216098/my_photo00087537_t2lghn.png"
+              src={portraitImage}
               alt="Mohamed Ahmed portrait"
               width={1100}
               height={1400}
@@ -249,7 +253,7 @@ export default function HomePage() {
           <div
             key={item.title}
             className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
-            data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
+            data-bg={sectionThemes[(Math.floor(index / 2) + 1) % sectionThemes.length]}
           >
             <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Showcase {index + 1}</p>
             <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
