@@ -153,21 +153,25 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <p className="kicker text-slate-700">Identity</p>
             <h3 className="mt-5 text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">{profile.name}</h3>
             <p className="mt-3 text-base text-slate-700 md:text-xl">{profile.role}</p>
             <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">{profile.about}</p>
           </div>
-          <div className="relative overflow-hidden rounded-[2.2rem] border border-white/15">
+          <div className="relative">
+            <div className="absolute -left-6 -top-6 h-[74%] w-[72%] rounded-[2.5rem] bg-red-200/80" />
+            <div className="absolute -bottom-6 right-0 h-[48%] w-[45%] rounded-[2rem] bg-yellow-100/70" />
+            <div className="relative overflow-hidden rounded-[2.2rem] border border-white/25 shadow-[0_26px_90px_rgba(13,18,34,0.25)]">
             <Image
-              src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1300&q=80"
-              alt="portrait"
+              src="https://res.cloudinary.com/dotredxrx/image/upload/q_auto/f_auto/v1777216098/my_photo00087537_t2lghn.png"
+              alt="Mohamed Ahmed portrait"
               width={1100}
               height={1400}
-              className="h-[560px] w-full object-cover"
+              className="h-[620px] w-full object-cover object-top"
             />
+            </div>
           </div>
         </div>
       </section>
