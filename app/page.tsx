@@ -18,7 +18,7 @@ const navItems = [
   { label: 'Contact', href: '#contact' }
 ];
 
-const sectionThemes = ['#F3F0EA', '#6B1F2B', '#0B0B0D', '#203730', '#1E3F66', '#6E7278'];
+const sectionThemes = ['#F3F0EA', '#6B1F2B', '#0B0B0D', '#203730', '#1E3F66', '#6E7278', '#6A571D'];
 const transitionDirections = ['ltr', 'rtl', 'btt', 'ltr', 'rtl', 'btt'];
 
 export default function HomePage() {
@@ -29,16 +29,25 @@ export default function HomePage() {
     const ctx = gsap.context(() => {
       gsap.fromTo('.hero-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
 
-      gsap.to('.nav-shell', {
-        width: 'min(980px, 94vw)',
-        backgroundColor: 'rgba(8, 12, 22, 0.82)',
-        borderColor: 'rgba(255,255,255,0.4)',
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top 88%',
-          end: 'top 15%',
-          scrub: true
-        }
+      ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top top',
+        onEnter: () =>
+          gsap.to('.nav-shell', {
+            scale: 0.985,
+            backgroundColor: 'rgba(8, 12, 22, 0.9)',
+            borderColor: 'rgba(255,255,255,0.45)',
+            duration: 0.35,
+            ease: 'power2.out'
+          }),
+        onLeaveBack: () =>
+          gsap.to('.nav-shell', {
+            scale: 1,
+            backgroundColor: 'rgba(8, 12, 22, 0.82)',
+            borderColor: 'rgba(255,255,255,0.3)',
+            duration: 0.35,
+            ease: 'power2.out'
+          })
       });
 
       gsap.from('.showcase-card', {
@@ -72,7 +81,11 @@ export default function HomePage() {
         );
       });
 
+      let activeColor = sectionThemes[0];
+      let moodTween: gsap.core.Tween | null = null;
+
       const setMood = (nextColor: string, direction: 'ltr' | 'rtl' | 'btt', sharp = false) => {
+        if (nextColor === activeColor) return;
         const axis =
           direction === 'rtl'
             ? { xPercent: 100, yPercent: 0 }
@@ -80,7 +93,8 @@ export default function HomePage() {
               ? { xPercent: 0, yPercent: 100 }
               : { xPercent: -100, yPercent: 0 };
         gsap.set('#mood-wipe', { backgroundColor: nextColor, opacity: 1, ...axis });
-        gsap.to('#mood-wipe', {
+        moodTween?.kill();
+        moodTween = gsap.to('#mood-wipe', {
           xPercent: 0,
           yPercent: 0,
           duration: sharp ? 0.26 : 0.62,
@@ -89,6 +103,7 @@ export default function HomePage() {
           onComplete: () => {
             gsap.set('#mood-base', { backgroundColor: nextColor });
             gsap.to('#mood-wipe', { opacity: 0, duration: 0.28, ease: 'power1.out' });
+            activeColor = nextColor;
           }
         });
       };
@@ -123,7 +138,7 @@ export default function HomePage() {
       <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
 
       <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
-        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/85 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
+        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/82 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
           <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
           <ul className="hidden items-center gap-2 md:flex">
             {navItems.map((item) => (
@@ -253,7 +268,7 @@ export default function HomePage() {
           <div
             key={item.title}
             className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
-            data-bg={sectionThemes[(Math.floor(index / 2) + 1) % sectionThemes.length]}
+            data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
           >
             <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Showcase {index + 1}</p>
             <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
