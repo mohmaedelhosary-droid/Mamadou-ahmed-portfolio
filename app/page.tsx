@@ -18,10 +18,11 @@ const navItems = [
   { label: 'Contact', href: '#contact' }
 ];
 
-const sectionThemes = ['#060910', '#0a1120', '#11182b', '#1a1325', '#101f2a', '#201116', '#121620', '#0b1b23'];
+const sectionThemes = ['#ffffff', '#ffffff', '#fff5e8', '#ffd8d8', '#ffb3b3', '#ffe48a', '#ffd850', '#ffd850'];
 
 export default function HomePage() {
   const [comparisonValue, setComparisonValue] = useState(50);
+  const [scrollRevealValue, setScrollRevealValue] = useState(0);
 
   useGsap(() => {
     const ctx = gsap.context(() => {
@@ -70,15 +71,37 @@ export default function HomePage() {
         );
       });
 
-      gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section) => {
-        const nextColor = section.dataset.bg ?? '#070b14';
+      const setMood = (nextColor: string, sharp = false) => {
+        gsap.set('#mood-wipe', { transformOrigin: 'left center', backgroundColor: nextColor, scaleX: 0 });
+        gsap.to('#mood-wipe', {
+          scaleX: 1,
+          duration: sharp ? 0.18 : 0.72,
+          ease: sharp ? 'power1.inOut' : 'power2.inOut',
+          overwrite: true,
+          onComplete: () => {
+            gsap.set('#mood-base', { backgroundColor: nextColor });
+            gsap.set('#mood-wipe', { scaleX: 0 });
+          }
+        });
+      };
+
+      gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section, index) => {
+        const nextColor = section.dataset.bg ?? '#ffffff';
         ScrollTrigger.create({
           trigger: section,
           start: 'top 55%',
           end: 'bottom 45%',
-          onEnter: () => gsap.to('body', { backgroundColor: nextColor, duration: 0.8, overwrite: 'auto' }),
-          onEnterBack: () => gsap.to('body', { backgroundColor: nextColor, duration: 0.8, overwrite: 'auto' })
+          onEnter: () => setMood(nextColor, index === 3),
+          onEnterBack: () => setMood(nextColor, index === 3)
         });
+      });
+
+      ScrollTrigger.create({
+        trigger: '#image-transform',
+        start: 'top 80%',
+        end: 'bottom 25%',
+        scrub: true,
+        onUpdate: (self) => setScrollRevealValue(Math.round(self.progress * 100))
       });
     });
 
@@ -87,6 +110,9 @@ export default function HomePage() {
 
   return (
     <main className="relative overflow-x-hidden pb-14">
+      <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-white" />
+      <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 origin-left scale-x-0" />
+
       <header className="pointer-events-none fixed inset-x-0 top-5 z-50 flex justify-center px-5">
         <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-full border border-white/15 bg-black/40 px-5 py-3 shadow-2xl backdrop-blur-xl md:px-7">
           <p className="text-xs font-medium uppercase tracking-[0.34em] text-slate-200">MA Studio</p>
@@ -104,9 +130,9 @@ export default function HomePage() {
 
       <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
-          <p className="kicker">Cinematic Portfolio</p>
-          <h1 className="mt-5 text-4xl font-semibold leading-tight text-white md:text-6xl">Real work. Clear playback. Cinematic progression.</h1>
-          <p className="mx-auto mt-4 max-w-3xl text-sm text-slate-300 md:text-base">
+          <p className="kicker text-slate-700">Cinematic Portfolio</p>
+          <h1 className="mt-5 text-4xl font-semibold leading-tight text-slate-900 md:text-6xl">Real work. Clear playback. Cinematic progression.</h1>
+          <p className="mx-auto mt-4 max-w-3xl text-sm text-slate-700 md:text-base">
             Each section introduces a distinct visual world with smooth mood transitions while keeping media large and watchable.
           </p>
         </div>
@@ -119,9 +145,9 @@ export default function HomePage() {
       </section>
 
       <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[1]}>
-        <p className="kicker">About</p>
-        <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight text-white md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
-        <div className="mt-10 space-y-3 text-lg leading-[1.35] text-slate-300 md:text-2xl">
+        <p className="kicker text-slate-700">About</p>
+        <h2 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
+        <div className="mt-10 space-y-3 text-lg leading-[1.35] text-slate-700 md:text-2xl">
           {revealLines.map((line) => (
             <p key={line}>{line}</p>
           ))}
@@ -129,10 +155,10 @@ export default function HomePage() {
 
         <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="kicker">Identity</p>
-            <h3 className="mt-5 text-3xl font-semibold leading-tight text-white md:text-5xl">{profile.name}</h3>
-            <p className="mt-3 text-base text-slate-300 md:text-xl">{profile.role}</p>
-            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-300 md:text-lg">{profile.about}</p>
+            <p className="kicker text-slate-700">Identity</p>
+            <h3 className="mt-5 text-3xl font-semibold leading-tight text-slate-900 md:text-5xl">{profile.name}</h3>
+            <p className="mt-3 text-base text-slate-700 md:text-xl">{profile.role}</p>
+            <p className="mt-8 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">{profile.about}</p>
           </div>
           <div className="relative overflow-hidden rounded-[2.2rem] border border-white/15">
             <Image
@@ -147,46 +173,63 @@ export default function HomePage() {
       </section>
 
       <section id="image-transform" className="theme-section section-shell section-spacing" data-bg={sectionThemes[2]}>
-        <p className="kicker">Image Comparison</p>
-        <h3 className="mt-5 max-w-3xl text-3xl font-semibold text-white md:text-5xl">{imageComparison.title}</h3>
-        <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">{imageComparison.description}</p>
+        <p className="kicker text-slate-700">Image Comparison</p>
+        <h3 className="mt-5 max-w-3xl text-3xl font-semibold text-slate-900 md:text-5xl">{imageComparison.title}</h3>
+        <p className="mt-3 max-w-3xl text-sm text-slate-700 md:text-base">{imageComparison.description}</p>
 
-        <article className="mt-10 rounded-[1.8rem] border border-white/15 bg-[#090d18] p-4 md:p-5">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
-            <Image
-              src={imageComparison.afterImage}
-              alt="After graded version"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 1200px"
-            />
-            <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
               <Image
-                src={imageComparison.beforeImage}
-                alt="Before original version"
+                src={imageComparison.afterImage}
+                alt="After graded version"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
+              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - Math.max(comparisonValue, scrollRevealValue)}% 0 0)` }}>
+                <Image
+                  src={imageComparison.beforeImage}
+                  alt="Before original version"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                />
+              </div>
+              <div className="pointer-events-none absolute inset-y-0" style={{ left: `${Math.max(comparisonValue, scrollRevealValue)}%` }}>
+                <div className="h-full w-[2px] bg-white/90" />
+              </div>
             </div>
-            <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
-              <div className="h-full w-[2px] bg-white/90" />
+            <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
+              <span>Before</span>
+              <span>After</span>
             </div>
-          </div>
-          <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
-            <span>Before</span>
-            <span>After</span>
-          </div>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={comparisonValue}
-            onChange={(event) => setComparisonValue(Number(event.target.value))}
-            aria-label="Before and after image comparison slider"
-            className="mt-4 w-full accent-slate-200"
-          />
-        </article>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={comparisonValue}
+              onChange={(event) => setComparisonValue(Number(event.target.value))}
+              aria-label="Before and after image comparison slider"
+              className="mt-4 w-full accent-slate-200"
+            />
+          </article>
+
+          <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
+            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Comparison Slot 02</p>
+            <p className="mt-2 text-sm text-slate-300">Reserved card for your next before/after image set.</p>
+            <div className="relative mt-4 aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
+              <Image src={imageComparison.beforeImage} alt="comparison slot before image" fill className="object-cover" sizes="(max-width: 768px) 100vw, 1200px" />
+              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - scrollRevealValue}% 0 0)` }}>
+                <Image src={imageComparison.afterImage} alt="comparison slot after image" fill className="object-cover" sizes="(max-width: 768px) 100vw, 1200px" />
+              </div>
+              <div className="pointer-events-none absolute inset-y-0" style={{ left: `${scrollRevealValue}%` }}>
+                <div className="h-full w-[2px] bg-white/90" />
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-slate-400">Scroll-driven reveal is active on this slot to keep comparison interaction dynamic.</p>
+          </article>
+        </div>
       </section>
 
       <section id="video-showcase" className="section-shell section-spacing">
@@ -207,9 +250,9 @@ export default function HomePage() {
 
       <section id="contact" className="theme-section section-shell section-spacing pb-32" data-bg={sectionThemes[5]}>
         <div className="rounded-[2.2rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-14">
-          <p className="kicker">Contact</p>
-          <h3 className="mt-5 text-3xl font-semibold text-white md:text-5xl">Let&apos;s build your next cinematic story.</h3>
-          <div className="mt-8 space-y-4 text-base text-slate-200 md:text-lg">
+          <p className="kicker text-slate-700">Contact</p>
+          <h3 className="mt-5 text-3xl font-semibold text-slate-900 md:text-5xl">Let&apos;s build your next cinematic story.</h3>
+          <div className="mt-8 space-y-4 text-base text-slate-700 md:text-lg">
             <p className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-haze" /> mohmaedelhosary@gmail.com
             </p>

@@ -17,8 +17,7 @@ export const videoSources = {
   motionVideo2: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111534/city_video-converter.com_vkch2x.mp4',
   showcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111502/bike-black_video-converter.com_arqtu1.mp4',
   bwVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777056389/bw_kpmapt.mp4',
-  extraShowcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777113944/Mountain_zxmajh.mp4',
-  documentVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777116017/Document_plcrww.mp4'
+  extraShowcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777113944/Mountain_zxmajh.mp4'
 };
 
 export const videoShowcase = [
@@ -67,11 +66,6 @@ export const videoShowcase = [
     title: 'Lake',
     description: 'A calm cinematic landscape sequence used as a supporting atmospheric world.',
     src: videoSources.heroVideo
-  },
-  {
-    title: 'Document',
-    description: 'A supporting cinematic visual piece presented as a standalone showcase.',
-    src: videoSources.documentVideo
   }
 ];
 
