@@ -16,6 +16,17 @@ body {
     radial-gradient(circle at 78% 16%, rgba(53, 102, 188, 0.14), transparent 26%);
 }
 
+.heading-cinematic {
+  font-family: 'Arial Narrow', 'Avenir Next Condensed', 'Franklin Gothic Medium', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.description-elegant {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'Times New Roman', serif;
+  letter-spacing: 0.01em;
+}
+
 .section-shell {
   @apply relative mx-auto max-w-6xl px-6 md:px-10;
 }
