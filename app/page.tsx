@@ -121,7 +121,7 @@ export default function HomePage() {
         const direction = transitionDirections[index % transitionDirections.length] as 'ltr' | 'rtl' | 'btt';
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 88%',
+          start: 'top 95%',
           end: 'bottom 45%',
           onEnter: () => setMood(nextColor, direction, index === 2),
           onEnterBack: () => setMood(nextColor, direction, index === 2)
@@ -145,7 +145,7 @@ export default function HomePage() {
       <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-[#F3F0EA]" />
       <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
 
-      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-5' : 'absolute top-5'}`}>
+      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-0 pt-2' : 'absolute top-0 pt-2'}`}>
         <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/82 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
           <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
           <ul className="hidden items-center gap-2 md:flex">
@@ -165,8 +165,8 @@ export default function HomePage() {
 
       <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
-          <p className="kicker text-slate-700">Cinematic Portfolio</p>
-          <h1 className="heading-cinematic mt-5 text-4xl font-semibold leading-tight text-slate-900 md:text-6xl">Real work. Clear playback. Cinematic progression.</h1>
+          <h1 className="heading-cinematic mt-2 bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 bg-clip-text text-5xl font-semibold leading-tight text-transparent md:text-7xl">{profile.name}</h1>
+          <p className="description-elegant mt-2 text-xl text-slate-700 md:text-2xl">{profile.role}</p>
           <p className="description-elegant mx-auto mt-4 max-w-3xl text-lg text-slate-700 md:text-xl">
             Each section introduces a distinct visual world with smooth mood transitions while keeping media large and watchable.
           </p>
@@ -228,7 +228,7 @@ export default function HomePage() {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
-              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - Math.max(comparisonValue, scrollRevealValue)}% 0 0)` }}>
+              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
                 <Image
                   src={imageComparison.beforeImage}
                   alt="Before original version"
@@ -237,7 +237,7 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, 1200px"
                 />
               </div>
-              <div className="pointer-events-none absolute inset-y-0" style={{ left: `${Math.max(comparisonValue, scrollRevealValue)}%` }}>
+              <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
                 <div className="h-full w-[2px] bg-white/90" />
               </div>
             </div>
@@ -257,18 +257,16 @@ export default function HomePage() {
           </article>
 
           <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Comparison Slot 02</p>
-            <p className="description-elegant mt-2 text-lg text-slate-300">Reserved card for your next before/after image set.</p>
-            <div className="relative mt-4 aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
-              <Image src={imageComparison.beforeImage} alt="comparison slot before image" fill className="object-cover" sizes="(max-width: 768px) 100vw, 1200px" />
-              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - scrollRevealValue}% 0 0)` }}>
-                <Image src={imageComparison.afterImage} alt="comparison slot after image" fill className="object-cover" sizes="(max-width: 768px) 100vw, 1200px" />
-              </div>
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10 bg-black/50">
+              <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.06),transparent_45%)]" />
               <div className="pointer-events-none absolute inset-y-0" style={{ left: `${scrollRevealValue}%` }}>
-                <div className="h-full w-[2px] bg-white/90" />
+                <div className="h-full w-[2px] bg-white/60" />
               </div>
             </div>
-            <p className="mt-3 text-xs text-slate-400">Scroll-driven reveal is active on this slot to keep comparison interaction dynamic.</p>
+            <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-400">
+              <span>Before</span>
+              <span>After</span>
+            </div>
           </article>
         </div>
       </section>
@@ -280,7 +278,6 @@ export default function HomePage() {
             className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
             data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
           >
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Showcase {index + 1}</p>
             <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
             <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">{item.description}</p>
             {'credit' in item && item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
@@ -293,13 +290,23 @@ export default function HomePage() {
         <div className="rounded-[2.2rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-14">
           <p className="kicker text-slate-700">Contact</p>
           <h3 className="heading-cinematic mt-5 text-3xl font-semibold text-slate-900 md:text-5xl">Let&apos;s create your next cinematic piece.</h3>
-          <div className="mt-8 space-y-4 text-base text-slate-700 md:text-lg">
-            <p className="flex items-center gap-3">
-              <Mail className="h-5 w-5 text-haze" /> mohmaedelhosary@gmail.com
-            </p>
-            <p className="flex items-center gap-3">
-              <Phone className="h-5 w-5 text-haze" /> +9010987922
-            </p>
+          <div className="mt-8 space-y-3 text-base text-slate-700 md:text-lg">
+            <a
+              href="mailto:mohmaedelhosary@gmail.com"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Mail className="h-4 w-4" />
+              mohmaedelhosary@gmail.com
+            </a>
+            <a
+              href="https://wa.me/9010987922"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Phone className="h-4 w-4" />
+              WhatsApp / +9010987922
+            </a>
             <a
               href="https://www.instagram.com/mamdou.amadu/?hl=en"
               target="_blank"
