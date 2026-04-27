@@ -247,8 +247,12 @@ export default function HomePage() {
 
       <section id="image-transform" className="theme-section section-shell section-spacing" data-bg={sectionThemes[0]}>
         <p className="kicker text-slate-700">Image Comparison</p>
-        <h3 className="heading-cinematic mt-5 max-w-3xl text-3xl font-semibold text-slate-900 md:text-5xl">{imageComparison.title}</h3>
-        <p className="description-elegant mt-3 max-w-3xl text-lg text-slate-700 md:text-xl">{imageComparison.description}</p>
+        <h3 className="heading-cinematic mt-5 max-w-3xl text-3xl font-semibold text-slate-900 md:text-5xl">
+          {imageComparison.title}
+        </h3>
+        <p className="description-elegant mt-3 max-w-3xl text-lg text-slate-700 md:text-xl">
+          {imageComparison.description}
+        </p>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
@@ -260,7 +264,8 @@ export default function HomePage() {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
-              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
+
+              <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${comparisonValue}%)` }}>
                 <Image
                   src={imageComparison.afterImage}
                   alt="After graded version"
@@ -269,14 +274,17 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, 1200px"
                 />
               </div>
+
               <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
                 <div className="h-full w-[2px] bg-white/90" />
               </div>
             </div>
+
             <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
               <span>Before</span>
               <span>After</span>
             </div>
+
             <input
               type="range"
               min={0}
@@ -295,6 +303,7 @@ export default function HomePage() {
                 <div className="h-full w-[2px] bg-white/60" />
               </div>
             </div>
+
             <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-400">
               <span>Before</span>
               <span>After</span>
@@ -310,12 +319,25 @@ export default function HomePage() {
             className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
             data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
           >
-            <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
-            <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">{item.description}</p>
-            {'credit' in item && item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
-            <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={item.src} />
+            <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">
+              {item.title}
+            </h4>
+            <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">
+              {item.description}
+            </p>
+            {'credit' in item && item.credit ? (
+              <p className="mt-2 text-xs text-slate-400">{item.credit}</p>
+            ) : null}
+            <video
+              className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover"
+              controls
+              preload="metadata"
+              playsInline
+              src={item.src}
+            />
           </div>
         ))}
+      </section>
       </section>
 
       <section id="contact" className="theme-section section-shell section-spacing pb-32" data-bg={sectionThemes[5]}>
