@@ -4,7 +4,7 @@ export const profile = {
   tagline:
     'A long-form scroll journey through visual transformation, mood, and precision post-production craft.',
   about:
-    'I shape footage into emotional narratives through rhythm, grading, sound texture, and cinematic transition design. Every section is directed to feel immersive, intentional, and story-first.'
+    'I shape footage into emotional narratives through rhythm, grading, sound texture, and cinematic transition design using DaVinci Resolve as my core finishing tool. Every section is directed to feel immersive, intentional, and story-first.'
 };
 
 export const portraitImage =

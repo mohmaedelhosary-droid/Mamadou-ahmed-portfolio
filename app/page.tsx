@@ -37,6 +37,38 @@ export default function HomePage() {
     const ctx = gsap.context(() => {
       gsap.fromTo('.hero-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
 
+      gsap.fromTo(
+        '.about-heading',
+        { opacity: 0.2, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          scrollTrigger: {
+            trigger: '#about',
+            start: 'top 88%',
+            end: 'top 55%',
+            scrub: true
+          }
+        }
+      );
+
+      gsap.fromTo(
+        '.about-line',
+        { opacity: 0.15, y: 18 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: '#about',
+            start: 'top 72%',
+            end: 'bottom 55%',
+            scrub: true
+          }
+        }
+      );
+
       ScrollTrigger.create({
         trigger: '#about',
         start: 'top top',
@@ -121,7 +153,7 @@ export default function HomePage() {
         const direction = transitionDirections[index % transitionDirections.length] as 'ltr' | 'rtl' | 'btt';
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 95%',
+          start: 'top 98%',
           end: 'bottom 45%',
           onEnter: () => setMood(nextColor, direction, index === 2),
           onEnterBack: () => setMood(nextColor, direction, index === 2)
@@ -145,7 +177,7 @@ export default function HomePage() {
       <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-[#F3F0EA]" />
       <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
 
-      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-0 pt-2' : 'absolute top-0 pt-2'}`}>
+      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-0' : 'absolute top-0'}`}>
         <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/82 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
           <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
           <ul className="hidden items-center gap-2 md:flex">
@@ -165,8 +197,8 @@ export default function HomePage() {
 
       <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
-          <h1 className="heading-cinematic mt-2 bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 bg-clip-text text-5xl font-semibold leading-tight text-transparent md:text-7xl">{profile.name}</h1>
-          <p className="description-elegant mt-2 text-xl text-slate-700 md:text-2xl">{profile.role}</p>
+          <h1 className="heading-cinematic mt-2 text-5xl font-semibold leading-tight text-slate-900 md:text-7xl">Real work. Clear playback. Cinematic progression.</h1>
+          <p className="description-elegant mt-2 text-xl text-slate-700 md:text-2xl">{profile.name} — {profile.role}</p>
           <p className="description-elegant mx-auto mt-4 max-w-3xl text-lg text-slate-700 md:text-xl">
             Each section introduces a distinct visual world with smooth mood transitions while keeping media large and watchable.
           </p>
@@ -181,17 +213,17 @@ export default function HomePage() {
 
       <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[2]}>
         <p className="kicker text-slate-300">About</p>
-        <h2 className="heading-cinematic mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
+        <h2 className="about-heading heading-cinematic mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
         <div className="description-elegant mt-10 space-y-3 text-2xl leading-[1.25] text-slate-300 md:text-3xl">
           {revealLines.map((line) => (
-            <p key={line}>{line}</p>
+            <p key={line} className="about-line">{line}</p>
           ))}
         </div>
 
         <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <p className="kicker text-slate-300">Identity</p>
-            <h3 className="heading-cinematic mt-5 text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">{profile.name}</h3>
+            <h3 className="heading-signature mt-5 text-5xl leading-tight text-slate-100 md:text-7xl">{profile.name}</h3>
             <p className="description-elegant mt-3 text-xl text-slate-300 md:text-2xl">{profile.role}</p>
             <p className="description-elegant mt-7 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl">{profile.about}</p>
             <p className="description-elegant mt-4 text-base text-slate-400 md:text-lg">A focused editorial identity block built around clarity, tone, and cinematic presence.</p>
@@ -222,16 +254,16 @@ export default function HomePage() {
           <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
             <div className="relative aspect-[16/10] overflow-hidden rounded-[1.2rem] border border-white/10">
               <Image
-                src={imageComparison.afterImage}
-                alt="After graded version"
+                src={imageComparison.beforeImage}
+                alt="Before original version"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
               <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
                 <Image
-                  src={imageComparison.beforeImage}
-                  alt="Before original version"
+                  src={imageComparison.afterImage}
+                  alt="After graded version"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 1200px"
@@ -317,6 +349,34 @@ export default function HomePage() {
               @mamdou.amadu
             </a>
           </div>
+          <form className="mt-10 grid gap-4 rounded-[1.8rem] border border-white/20 bg-white/20 p-5 md:grid-cols-2 md:p-6">
+            <input
+              type="text"
+              placeholder="Name"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60"
+            />
+            <input
+              type="tel"
+              placeholder="Phone number"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60 md:col-span-2"
+            />
+            <textarea
+              placeholder="Message"
+              rows={5}
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60 md:col-span-2"
+            />
+            <button
+              type="button"
+              className="heading-cinematic rounded-full border border-slate-700/40 bg-[#101b2f] px-6 py-3 text-sm text-slate-100 transition hover:bg-[#152845] md:col-span-2 md:w-fit"
+            >
+              Send Message
+            </button>
+          </form>
         </div>
       </section>
     </main>
