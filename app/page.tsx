@@ -19,6 +19,7 @@ const navItems = [
 ];
 
 const sectionThemes = ['#F3F0EA', '#6B1F2B', '#0B0B0D', '#203730', '#1E3F66', '#6E7278', '#6A571D'];
+const transitionDirections = ['ltr', 'rtl', 'btt', 'ltr', 'rtl', 'btt'];
 
 export default function HomePage() {
   const [comparisonValue, setComparisonValue] = useState(50);
@@ -26,14 +27,7 @@ export default function HomePage() {
   const [isStickyNav, setIsStickyNav] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setIsStickyNav(window.scrollY > 8);
-
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100)) : 0;
-      setScrollRevealValue(progress);
-    };
-
+    const onScroll = () => setIsStickyNav(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -41,35 +35,137 @@ export default function HomePage() {
 
   useGsap(() => {
     const ctx = gsap.context(() => {
+      gsap.fromTo('.hero-content', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
+
       gsap.fromTo(
-        '.about-reveal',
-        { opacity: 0.18, filter: 'blur(6px)', y: 32 },
+        '.about-heading',
+        { opacity: 0.2, y: 24 },
         {
           opacity: 1,
-          filter: 'blur(0px)',
           y: 0,
-          stagger: 0.12,
-          ease: 'power2.out',
+          duration: 0.7,
           scrollTrigger: {
             trigger: '#about',
-            start: 'top 72%',
-            end: 'bottom 45%',
+            start: 'top 88%',
+            end: 'top 55%',
             scrub: true
           }
         }
       );
 
-      gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section) => {
-        const bg = section.dataset.bg;
-        if (!bg) return;
+      gsap.fromTo(
+        '.about-line',
+        { opacity: 0.15, y: 18 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: '#about',
+            start: 'top 72%',
+            end: 'bottom 55%',
+            scrub: true
+          }
+        }
+      );
 
+      ScrollTrigger.create({
+        trigger: '#about',
+        start: 'top top',
+        onEnter: () =>
+          gsap.to('.nav-shell', {
+            scale: 0.985,
+            backgroundColor: 'rgba(8, 12, 22, 0.9)',
+            borderColor: 'rgba(255,255,255,0.45)',
+            duration: 0.35,
+            ease: 'power2.out'
+          }),
+        onLeaveBack: () =>
+          gsap.to('.nav-shell', {
+            scale: 1,
+            backgroundColor: 'rgba(8, 12, 22, 0.82)',
+            borderColor: 'rgba(255,255,255,0.3)',
+            duration: 0.35,
+            ease: 'power2.out'
+          })
+      });
+
+      gsap.from('.showcase-card', {
+        y: 44,
+        opacity: 0,
+        duration: 0.95,
+        ease: 'power2.out',
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: '#video-showcase',
+          start: 'top 78%'
+        }
+      });
+
+      gsap.utils.toArray<HTMLElement>('.showcase-stage').forEach((stage) => {
+        gsap.fromTo(
+          stage,
+          { y: 36, scale: 0.985, opacity: 0.85 },
+          {
+            y: -10,
+            scale: 1,
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: stage,
+              start: 'top 85%',
+              end: 'bottom 20%',
+              scrub: true
+            }
+          }
+        );
+      });
+
+      let activeColor = sectionThemes[0];
+      let moodTween: gsap.core.Tween | null = null;
+
+      const setMood = (nextColor: string, direction: 'ltr' | 'rtl' | 'btt', sharp = false) => {
+        if (nextColor === activeColor) return;
+        const axis =
+          direction === 'rtl'
+            ? { xPercent: 100, yPercent: 0 }
+            : direction === 'btt'
+              ? { xPercent: 0, yPercent: 100 }
+              : { xPercent: -100, yPercent: 0 };
+        gsap.set('#mood-wipe', { backgroundColor: nextColor, opacity: 1, ...axis });
+        moodTween?.kill();
+        moodTween = gsap.to('#mood-wipe', {
+          xPercent: 0,
+          yPercent: 0,
+          duration: sharp ? 0.26 : 0.62,
+          ease: sharp ? 'power2.out' : 'power3.out',
+          overwrite: true,
+          onComplete: () => {
+            gsap.set('#mood-base', { backgroundColor: nextColor });
+            gsap.to('#mood-wipe', { opacity: 0, duration: 0.28, ease: 'power1.out' });
+            activeColor = nextColor;
+          }
+        });
+      };
+
+      gsap.utils.toArray<HTMLElement>('.theme-section').forEach((section, index) => {
+        const nextColor = section.dataset.bg ?? '#ffffff';
+        const direction = transitionDirections[index % transitionDirections.length] as 'ltr' | 'rtl' | 'btt';
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 65%',
-          end: 'bottom 35%',
-          onEnter: () => gsap.to('body', { backgroundColor: bg, duration: 0.45, ease: 'power2.out' }),
-          onEnterBack: () => gsap.to('body', { backgroundColor: bg, duration: 0.45, ease: 'power2.out' })
+          start: 'top 98%',
+          end: 'bottom 45%',
+          onEnter: () => setMood(nextColor, direction, index === 2),
+          onEnterBack: () => setMood(nextColor, direction, index === 2)
         });
+      });
+
+      ScrollTrigger.create({
+        trigger: '#image-transform',
+        start: 'top 80%',
+        end: 'bottom 25%',
+        scrub: true,
+        onUpdate: (self) => setScrollRevealValue(Math.round(self.progress * 100))
       });
     });
 
@@ -78,17 +174,19 @@ export default function HomePage() {
 
   return (
     <main className="relative overflow-x-hidden pb-14">
-      <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-5">
-        <nav
-          className={`nav-shell pointer-events-auto flex w-full max-w-[1060px] items-center justify-between rounded-full border px-5 py-3 shadow-2xl backdrop-blur-xl transition-all duration-300 md:px-7 ${
-            isStickyNav ? 'border-white/25 bg-black/70' : 'border-white/15 bg-black/45'
-          }`}
-        >
-          <p className="text-xs font-medium uppercase tracking-[0.34em] text-slate-200">MA Studio</p>
-          <ul className="hidden items-center gap-5 md:flex">
+      <div id="mood-base" className="pointer-events-none fixed inset-0 -z-20 bg-[#F3F0EA]" />
+      <div id="mood-wipe" className="pointer-events-none fixed inset-0 -z-10 opacity-0" />
+
+      <header className={`pointer-events-none inset-x-0 z-50 flex justify-center px-5 transition-all duration-300 ${isStickyNav ? 'fixed top-0' : 'absolute top-0'}`}>
+        <nav className="nav-shell pointer-events-auto flex w-full max-w-[1080px] items-center justify-between rounded-[999px] border border-white/30 bg-[#080d16]/82 px-4 py-3 shadow-[0_18px_60px_rgba(4,8,18,0.45)] backdrop-blur-2xl md:px-6">
+          <p className="heading-cinematic text-sm font-semibold text-slate-100">MA STUDIO</p>
+          <ul className="hidden items-center gap-2 md:flex">
             {navItems.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className="text-xs uppercase tracking-[0.2em] text-slate-300 transition hover:text-white">
+                <a
+                  href={item.href}
+                  className="rounded-full border border-transparent px-3 py-2 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-200 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+                >
                   {item.label}
                 </a>
               </li>
@@ -99,83 +197,58 @@ export default function HomePage() {
 
       <section id="hero" className="theme-section section-shell section-spacing pt-32 md:pt-36" data-bg={sectionThemes[0]}>
         <div className="hero-content mx-auto max-w-4xl text-center">
-          <h1 className="heading-cinematic mt-2 text-5xl font-semibold leading-tight text-slate-900 md:text-7xl">
-            Real work. Clear playback. Cinematic progression.
-          </h1>
-          <p className="description-elegant mt-2 text-xl text-slate-700 md:text-2xl">
-            {profile.name} — {profile.role}
-          </p>
+          <h1 className="heading-cinematic mt-2 text-5xl font-semibold leading-tight text-slate-900 md:text-7xl">Real work. Clear playback. Cinematic progression.</h1>
+          <p className="description-elegant mt-2 text-xl text-slate-700 md:text-2xl">{profile.name} — {profile.role}</p>
           <p className="description-elegant mx-auto mt-4 max-w-3xl text-lg text-slate-700 md:text-xl">
             Each section introduces a distinct visual world with smooth mood transitions while keeping media large and watchable.
           </p>
         </div>
-
         <div className="showcase-stage mt-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7">
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Opening Visual</p>
           <h2 className="mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{heroShowcase.title}</h2>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">{heroShowcase.description}</p>
-          <video
-            className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover"
-            controls
-            preload="metadata"
-            playsInline
-            src={heroShowcase.src}
-          />
+          <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={heroShowcase.src} />
         </div>
       </section>
 
       <section id="about" className="theme-section section-shell section-spacing" data-bg={sectionThemes[2]}>
-        <p className="kicker text-haze">About</p>
-        <h2 className="about-reveal mt-6 max-w-4xl text-4xl font-semibold leading-[1.05] text-white md:text-7xl">
-          A deliberate visual storyteller focused on cinematic pacing.
-        </h2>
-
-        <div className="mt-10 space-y-4 text-2xl font-medium leading-[1.3] text-white md:text-4xl">
+        <p className="kicker text-slate-300">About</p>
+        <h2 className="about-heading heading-cinematic mt-5 max-w-4xl text-3xl font-semibold leading-tight text-slate-100 md:text-5xl">A deliberate visual storyteller focused on cinematic pacing.</h2>
+        <div className="description-elegant mt-10 space-y-3 text-2xl leading-[1.25] text-slate-300 md:text-3xl">
           {revealLines.map((line) => (
-            <p key={line} className="about-reveal">
-              {line}
-            </p>
+            <p key={line} className="about-line">{line}</p>
           ))}
         </div>
-      </section>
 
-      <section id="identity" className="theme-section section-shell section-spacing min-h-screen" data-bg={sectionThemes[2]}>
-        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="kicker text-haze">Identity</p>
-            <h3 className="mt-5 font-serif text-5xl font-semibold leading-tight text-white md:text-7xl">
-              {profile.name}
-            </h3>
-            <p className="mt-3 text-lg text-slate-300 md:text-2xl">{profile.role}</p>
-            <p className="mt-10 max-w-2xl text-base leading-relaxed text-slate-300 md:text-xl">{profile.about}</p>
-            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-slate-400 md:text-base">
-              Main editing workflow includes DaVinci Resolve for editing, color grading, and cinematic finishing.
-            </p>
+            <p className="kicker text-slate-300">Identity</p>
+            <h3 className="heading-signature mt-5 text-5xl leading-tight text-slate-100 md:text-7xl">{profile.name}</h3>
+            <p className="description-elegant mt-3 text-xl text-slate-300 md:text-2xl">{profile.role}</p>
+            <p className="description-elegant mt-7 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl">{profile.about}</p>
+            <p className="description-elegant mt-4 text-base text-slate-400 md:text-lg">A focused editorial identity block built around clarity, tone, and cinematic presence.</p>
           </div>
-
           <div className="relative">
-            <div id="identity-block" className="absolute -right-8 -top-8 h-[70%] w-[70%] rounded-[4rem] bg-indigo-500/35 opacity-70 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[2.5rem] border border-white/15">
-              <Image
-                src={portraitImage}
-                alt={`${profile.name} portrait`}
-                width={1100}
-                height={1400}
-                className="identity-media h-[640px] w-full object-cover"
-              />
+            <div className="absolute -left-6 -top-6 h-[74%] w-[72%] rounded-[2.5rem] bg-red-200/80" />
+            <div className="absolute -bottom-6 right-0 h-[48%] w-[45%] rounded-[2rem] bg-yellow-100/70" />
+            <div className="relative overflow-hidden rounded-[2.2rem] border border-white/25 shadow-[0_26px_90px_rgba(13,18,34,0.25)]">
+            <Image
+              src={portraitImage}
+              alt="Mohamed Ahmed portrait"
+              width={1100}
+              height={1400}
+              className="h-[620px] w-full object-cover object-top"
+            />
             </div>
+            <p className="description-elegant mt-4 text-sm text-slate-400">Portrait</p>
           </div>
         </div>
       </section>
 
-      <section id="image-transform" className="theme-section section-shell section-spacing" data-bg={sectionThemes[1]}>
+      <section id="image-transform" className="theme-section section-shell section-spacing" data-bg={sectionThemes[0]}>
         <p className="kicker text-slate-700">Image Comparison</p>
-        <h3 className="heading-cinematic mt-5 max-w-3xl text-3xl font-semibold text-slate-900 md:text-5xl">
-          {imageComparison.title}
-        </h3>
-        <p className="description-elegant mt-3 max-w-3xl text-lg text-slate-700 md:text-xl">
-          {imageComparison.description}
-        </p>
+        <h3 className="heading-cinematic mt-5 max-w-3xl text-3xl font-semibold text-slate-900 md:text-5xl">{imageComparison.title}</h3>
+        <p className="description-elegant mt-3 max-w-3xl text-lg text-slate-700 md:text-xl">{imageComparison.description}</p>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <article className="rounded-[1.8rem] border border-white/40 bg-[#090d18] p-4 md:p-5">
@@ -187,8 +260,7 @@ export default function HomePage() {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 1200px"
               />
-
-              <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${comparisonValue}%)` }}>
+              <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - comparisonValue}% 0 0)` }}>
                 <Image
                   src={imageComparison.afterImage}
                   alt="After graded version"
@@ -197,17 +269,14 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, 1200px"
                 />
               </div>
-
               <div className="pointer-events-none absolute inset-y-0" style={{ left: `${comparisonValue}%` }}>
                 <div className="h-full w-[2px] bg-white/90" />
               </div>
             </div>
-
             <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-300">
               <span>Before</span>
               <span>After</span>
             </div>
-
             <input
               type="range"
               min={0}
@@ -226,7 +295,6 @@ export default function HomePage() {
                 <div className="h-full w-[2px] bg-white/60" />
               </div>
             </div>
-
             <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-slate-400">
               <span>Before</span>
               <span>After</span>
@@ -236,60 +304,78 @@ export default function HomePage() {
       </section>
 
       <section id="video-showcase" className="section-shell section-spacing">
-        {videoShowcase.map((item, index) => (
-          <div
-            key={item.title}
-            className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
-            data-bg={sectionThemes[(index + 3) % sectionThemes.length]}
-          >
-            <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">
-              {item.title}
-            </h4>
-
-            <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">
-              {item.description}
-            </p>
-
-            {'credit' in item && item.credit ? (
-              <p className="mt-2 text-xs text-slate-400">{item.credit}</p>
-            ) : null}
-
-            <video
-              className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover"
-              controls
-              preload="metadata"
-              playsInline
-              src={item.src}
-            />
-          </div>
-        ))}
+        {videoShowcase.map((item, index) => {
+          return (
+            <article
+              key={item.title}
+              className="theme-section showcase-card showcase-stage mb-10 rounded-[2rem] border border-white/15 bg-[#080d18] p-5 md:p-7"
+              data-bg={sectionThemes[(index + 1) % sectionThemes.length]}
+            >
+              <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
+              <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">{item.description}</p>
+              {'credit' in item && item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
+              <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={item.src} />
+            </article>
+          );
+        })}
       </section>
 
       <section id="contact" className="theme-section section-shell section-spacing pb-32" data-bg={sectionThemes[5]}>
-        <div className="rounded-[2.8rem] border border-white/15 bg-gradient-to-br from-white/[0.08] to-white/[0.03] p-10 md:p-16">
-          <p className="kicker text-haze">Contact</p>
-          <h3 className="heading-cinematic mt-5 text-4xl font-semibold text-white md:text-6xl">
-            Let&apos;s create your next cinematic piece.
-          </h3>
-
-          <div className="mt-10 flex flex-wrap gap-3 text-sm text-slate-800">
-            <a href="mailto:mohmaedelhosary@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
-              <Mail className="h-4 w-4" /> mohmaedelhosary@gmail.com
+        <div className="rounded-[2.2rem] border border-white/15 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-10 md:p-14">
+          <p className="kicker text-slate-700">Contact</p>
+          <h3 className="heading-cinematic mt-5 text-3xl font-semibold text-slate-900 md:text-5xl">Let&apos;s create your next cinematic piece.</h3>
+          <div className="mt-8 space-y-3 text-base text-slate-700 md:text-lg">
+            <a
+              href="mailto:mohmaedelhosary@gmail.com"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Mail className="h-4 w-4" />
+              mohmaedelhosary@gmail.com
             </a>
-            <a href="https://wa.me/9010987922" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
-              <Phone className="h-4 w-4" /> WhatsApp / +9010987922
+            <a
+              href="https://wa.me/9010987922"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Phone className="h-4 w-4" />
+              WhatsApp / +9010987922
             </a>
-            <a href="https://www.instagram.com/mamdou.amadu/?hl=en" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
-              <Instagram className="h-4 w-4" /> @mamdou.amadu
+            <a
+              href="https://www.instagram.com/mamdou.amadu/?hl=en"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 rounded-full border border-slate-500/40 bg-white/30 px-4 py-2 text-sm font-medium text-slate-800 transition hover:border-slate-700/60 hover:bg-white/55"
+            >
+              <Instagram className="h-4 w-4" />
+              @mamdou.amadu
             </a>
           </div>
-
-          <form className="mt-10 grid gap-4 md:grid-cols-2">
-            <input className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-slate-400" placeholder="Name" />
-            <input className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-slate-400" placeholder="Email" type="email" />
-            <input className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-slate-400 md:col-span-2" placeholder="Phone number" />
-            <textarea className="min-h-32 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-slate-400 md:col-span-2" placeholder="Message" />
-            <button type="button" className="rounded-full bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 md:col-span-2">
+          <form className="mt-10 grid gap-4 rounded-[1.8rem] border border-white/20 bg-white/20 p-5 md:grid-cols-2 md:p-6">
+            <input
+              type="text"
+              placeholder="Name"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60"
+            />
+            <input
+              type="tel"
+              placeholder="Phone number"
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60 md:col-span-2"
+            />
+            <textarea
+              placeholder="Message"
+              rows={5}
+              className="rounded-xl border border-slate-400/30 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-600 focus:border-slate-700/60 md:col-span-2"
+            />
+            <button
+              type="button"
+              className="heading-cinematic rounded-full border border-slate-700/40 bg-[#101b2f] px-6 py-3 text-sm text-slate-100 transition hover:bg-[#152845] md:col-span-2 md:w-fit"
+            >
               Send Message
             </button>
           </form>
