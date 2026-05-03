@@ -10,6 +10,21 @@ export const profile = {
 export const portraitImage =
   'https://res.cloudinary.com/dotredxrx/image/upload/q_auto/f_auto/v1777216098/my_photo00087537_t2lghn.png';
 
+
+const cloudinaryPosterFromVideo = (videoUrl: string, seconds = 1) =>
+  videoUrl
+    .replace('/video/upload/', `/video/upload/so_${seconds},f_jpg/`)
+    .replace(/\.mp4(?:\?.*)?$/, '.jpg');
+
+
+type VideoItem = {
+  title: string;
+  description: string;
+  src: string;
+  poster: string;
+  credit?: string;
+};
+
 export const videoSources = {
   heroVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111663/Lake_xprehu.mp4',
   featuredVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111566/Bedroom_zkqrxl.mp4',
@@ -20,63 +35,74 @@ export const videoSources = {
   motionVideo2: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111534/city_video-converter.com_vkch2x.mp4',
   showcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777111502/bike-black_video-converter.com_arqtu1.mp4',
   bwVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777056389/bw_kpmapt.mp4',
-  extraShowcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777113944/Mountain_zxmajh.mp4'
+  extraShowcaseVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto:best/f_auto/v1777113944/Mountain_zxmajh.mp4',
+  cinematicIntroVideo: 'https://res.cloudinary.com/dotredxrx/video/upload/q_auto/f_auto/v1777780019/cinematic_intro_reel_zyjcqk.mp4'
 };
 
-export const videoShowcase = [
+export const videoShowcase: VideoItem[] = [
   {
-    title: 'Road',
-    description: 'Movement, framing, and grading in open space.',
-    src: videoSources.motionVideo1
-  },
-  {
-    title: 'City',
-    description: 'Atmosphere, scale, and a clean cinematic tone.',
-    src: videoSources.motionVideo2
-  },
-  {
-    title: 'Bedroom — Featured Short Film',
-    description: 'Featured short film project.',
-    credit:
-      'Credit: Editing, Color Grading, and Sound Design by Mohamed Ahmed. Cinematography by another creator.',
-    src: videoSources.featuredVideo
-  },
-  {
-    title: 'Gas Station — Green Mood',
-    description: 'Standalone grade with a green tonal mood.',
-    src: videoSources.beforeVideo
-  },
-  {
-    title: 'Gas Station — Red Mood',
-    description: 'Standalone grade with a red tonal mood.',
-    src: videoSources.afterVideo
-  },
-  {
-    title: 'BW — Motion & Editing Reel',
-    description: 'Reel-style editing with transitions, movement, and text.',
-    src: videoSources.bwVideo
+    title: 'Lake',
+    description: 'Calm landscape sequence with cinematic mood.',
+    src: videoSources.heroVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.heroVideo)
   },
   {
     title: 'Bike Black',
     description: 'Black-and-white cinematic piece with contrast and texture.',
-    src: videoSources.showcaseVideo
+    src: videoSources.showcaseVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.showcaseVideo)
+  },
+  {
+    title: 'Cinematic Intro Reel',
+    description: 'A fast-paced intro reel built with masking, transitions, sound-driven movement, and cinematic editing energy.',
+    src: videoSources.cinematicIntroVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.cinematicIntroVideo)
+  },
+  {
+    title: 'Road',
+    description: 'Movement, framing, and grading in open space.',
+    src: videoSources.motionVideo1,
+    poster: cloudinaryPosterFromVideo(videoSources.motionVideo1)
+  },
+  {
+    title: 'Mountain',
+    description: 'Scenic sequence with scale, natural depth, and immersive grading.',
+    src: videoSources.extraShowcaseVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.extraShowcaseVideo)
+  },
+  {
+    title: 'Gas Station — Green Mood',
+    description: 'Standalone grade with a green tonal mood.',
+    src: videoSources.beforeVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.beforeVideo)
+  },
+  {
+    title: 'Gas Station — Red Mood',
+    description: 'Standalone grade with a red tonal mood.',
+    src: videoSources.afterVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.afterVideo)
+  },
+  {
+    title: 'BW — Motion & Editing Reel',
+    description: 'Reel-style editing with transitions, movement, and text.',
+    src: videoSources.bwVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.bwVideo)
   },
   {
     title: 'Masking',
     description: 'Masking and compositing precision showcase.',
-    src: videoSources.maskingVideo
-  },
-  {
-    title: 'Lake',
-    description: 'Calm landscape sequence with cinematic mood.',
-    src: videoSources.heroVideo
+    src: videoSources.maskingVideo,
+    poster: cloudinaryPosterFromVideo(videoSources.maskingVideo)
   }
 ];
 
-export const heroShowcase = {
-  title: 'Mountain',
-  description: 'A scenic opening visual built around scale, natural depth, and immersive grading.',
-  src: videoSources.extraShowcaseVideo
+export const heroShowcase: VideoItem = {
+  title: 'Bedroom — Featured Short Film',
+  description: 'A short film project focused on emotion, pacing, editing, color grading, and sound design.',
+  credit:
+    'Credit: Editing, Color Grading, and Sound Design by Mohamed Ahmed. Cinematography by another creator.',
+  src: videoSources.featuredVideo,
+  poster: cloudinaryPosterFromVideo(videoSources.featuredVideo)
 };
 
 export const imageComparison = {
