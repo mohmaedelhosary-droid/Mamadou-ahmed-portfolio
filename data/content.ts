@@ -25,21 +25,31 @@ export const videoSources = {
 
 export const videoShowcase = [
   {
-    title: 'Road',
-    description: 'Movement, framing, and grading in open space.',
-    src: videoSources.motionVideo1
-  },
-  {
-    title: 'City',
-    description: 'Atmosphere, scale, and a clean cinematic tone.',
-    src: videoSources.motionVideo2
-  },
-  {
     title: 'Bedroom — Featured Short Film',
     description: 'Featured short film project.',
     credit:
       'Credit: Editing, Color Grading, and Sound Design by Mohamed Ahmed. Cinematography by another creator.',
     src: videoSources.featuredVideo
+  },
+  {
+    title: 'Lake',
+    description: 'Calm landscape sequence with cinematic mood.',
+    src: videoSources.heroVideo
+  },
+  {
+    title: 'Bike Black',
+    description: 'Black-and-white cinematic piece with contrast and texture.',
+    src: videoSources.showcaseVideo
+  },
+  {
+    title: 'Road',
+    description: 'Movement, framing, and grading in open space.',
+    src: videoSources.motionVideo1
+  },
+  {
+    title: 'Mountain',
+    description: 'Scenic sequence with scale, natural depth, and immersive grading.',
+    src: videoSources.extraShowcaseVideo
   },
   {
     title: 'Gas Station — Green Mood',
@@ -57,21 +67,12 @@ export const videoShowcase = [
     src: videoSources.bwVideo
   },
   {
-    title: 'Bike Black',
-    description: 'Black-and-white cinematic piece with contrast and texture.',
-    src: videoSources.showcaseVideo
-  },
-  {
     title: 'Masking',
     description: 'Masking and compositing precision showcase.',
     src: videoSources.maskingVideo
-  },
-  {
-    title: 'Lake',
-    description: 'Calm landscape sequence with cinematic mood.',
-    src: videoSources.heroVideo
   }
 ];
+
 
 export const heroShowcase = {
   title: 'Mountain',

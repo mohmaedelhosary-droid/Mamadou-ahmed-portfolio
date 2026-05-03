@@ -122,6 +122,7 @@ export default function HomePage() {
       });
 
       let activeColor = sectionThemes[0];
+      let activeThemeIndex = 0;
       let moodTween: gsap.core.Tween | null = null;
 
       const setMood = (nextColor: string, direction: 'ltr' | 'rtl' | 'btt', sharp = false) => {
@@ -137,12 +138,12 @@ export default function HomePage() {
         moodTween = gsap.to('#mood-wipe', {
           xPercent: 0,
           yPercent: 0,
-          duration: sharp ? 0.26 : 0.62,
-          ease: sharp ? 'power2.out' : 'power3.out',
+          duration: sharp ? 0.24 : 0.56,
+          ease: 'power2.out',
           overwrite: true,
           onComplete: () => {
             gsap.set('#mood-base', { backgroundColor: nextColor });
-            gsap.to('#mood-wipe', { opacity: 0, duration: 0.28, ease: 'power1.out' });
+            gsap.to('#mood-wipe', { opacity: 0, duration: 0.22, ease: 'power1.out' });
             activeColor = nextColor;
           }
         });
@@ -153,10 +154,13 @@ export default function HomePage() {
         const direction = transitionDirections[index % transitionDirections.length] as 'ltr' | 'rtl' | 'btt';
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 98%',
-          end: 'bottom 45%',
-          onEnter: () => setMood(nextColor, direction, index === 2),
-          onEnterBack: () => setMood(nextColor, direction, index === 2)
+          start: 'top 55%',
+          onToggle: (self) => {
+            if (!self.isActive || index === activeThemeIndex) return;
+            const movingDown = self.direction >= 0;
+            setMood(nextColor, movingDown ? direction : 'rtl', index === 2);
+            activeThemeIndex = index;
+          }
         });
       });
 
