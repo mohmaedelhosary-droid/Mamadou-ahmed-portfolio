@@ -211,7 +211,8 @@ export default function HomePage() {
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Opening Visual</p>
           <h2 className="mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{heroShowcase.title}</h2>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300 md:text-base">{heroShowcase.description}</p>
-          <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={heroShowcase.src} />
+          {heroShowcase.credit ? <p className="mt-2 text-xs text-slate-400">{heroShowcase.credit}</p> : null}
+          <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline poster={heroShowcase.poster} src={heroShowcase.src} />
         </div>
       </section>
 
@@ -317,8 +318,8 @@ export default function HomePage() {
             >
               <h4 className="heading-cinematic mt-3 text-2xl font-medium text-slate-100 md:text-3xl">{item.title}</h4>
               <p className="description-elegant mt-2 max-w-3xl text-lg leading-relaxed text-slate-300 md:text-xl">{item.description}</p>
-              {'credit' in item && item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
-              <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline src={item.src} />
+              {item.credit ? <p className="mt-2 text-xs text-slate-400">{item.credit}</p> : null}
+              <video className="mt-5 w-full rounded-[1.2rem] border border-white/10 bg-black object-cover" controls preload="metadata" playsInline poster={item.poster} src={item.src} />
             </article>
           );
         })}
